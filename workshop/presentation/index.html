@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Introduction to AI for Mental Health Applications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0A1628; --offwhite:#F7F4EF; --magenta:#B93680;
+  --warning:#D1A6AD; --white:#FFFFFF; --teal-dark:#0D2137;
+  --s0:#6B7280; --s1:#B93680; --s2:#2563EB; --s3:#7C3AED; --s4:#059669; --s5:#D97706; --s6:#B93680;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:#000;overflow:hidden;height:100vh;width:100vw}
+/* ── Slides ── */
+.slide{display:none;position:absolute;inset:0;padding:4rem 5rem 5rem;
+  flex-direction:column;justify-content:center;align-items:flex-start;
+  background:var(--navy);color:var(--white);
+  opacity:0;transition:opacity .35s ease}
+.slide.active{display:flex;opacity:1}
+.slide.light{background:var(--offwhite);color:var(--navy)}
+.slide.callout{background:var(--teal-dark);color:var(--white)}
+/* ── Typography ── */
+.slide-title{font-family:'Playfair Display',serif;font-size:2.6rem;line-height:1.2;margin-bottom:1.4rem;color:inherit}
+.slide-subtitle{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:1rem;color:inherit}
+.slide-body{font-size:1.3rem;line-height:1.6;max-width:900px}
+.light .slide-title{color:var(--navy)}
+.accent{color:var(--magenta)}
+.light .accent{color:var(--magenta)}
+/* ── Section label ── */
+.section-label{font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--magenta);margin-bottom:.5rem;font-weight:600}
+/* ── Cards / boxes ── */
+.card{background:rgba(255,255,255,.07);border-radius:8px;padding:1.2rem 1.5rem;margin:.5rem 0}
+.light .card{background:rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.12)}
+.card-row{display:flex;gap:1.2rem;width:100%;flex-wrap:wrap}
+.card-col{flex:1;min-width:220px}
+.magenta-border{border-left:4px solid var(--magenta);padding-left:1rem}
+.warning-box{background:rgba(209,166,173,.18);border:1.5px solid var(--warning);
+  border-radius:8px;padding:1rem 1.4rem;font-size:1.1rem;margin-top:1rem}
+.light .warning-box{background:rgba(209,166,173,.25)}
+.callout-box{background:var(--magenta);color:#fff;border-radius:8px;padding:1rem 1.4rem;font-size:1.15rem;margin-top:1rem}
+/* ── Grid ── */
+.grid-2x3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;width:100%;margin-top:.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;width:100%}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;width:100%}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;width:100%}
+.domain-card{background:rgba(255,255,255,.07);border-radius:8px;padding:1rem;text-align:center;font-size:1rem;border:2px solid transparent;transition:all .3s}
+.domain-card.highlight{border-color:var(--magenta);background:rgba(185,54,128,.15)}
+.domain-card .icon{font-size:1.8rem;display:block;margin-bottom:.4rem}
+/* ── Timeline (slide 5) ── */
+.timeline-wrap{width:100%;margin-top:1.5rem;position:relative}
+.timeline-line{height:4px;background:rgba(255,255,255,.2);border-radius:2px;position:relative;overflow:visible}
+.timeline-fill{height:4px;background:var(--magenta);border-radius:2px;width:0;
+  transition:width 1.8s ease;position:absolute;top:0;left:0}
+.timeline-dots{display:flex;justify-content:space-between;position:relative;margin-top:-.4rem}
+.t-dot{display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .4s ease}
+.t-dot-circle{width:12px;height:12px;background:var(--magenta);border-radius:50%;border:2px solid #fff}
+.t-dot-year{font-size:.7rem;color:rgba(255,255,255,.7);margin-top:.3rem;white-space:nowrap}
+.t-dot-label{font-size:.7rem;color:var(--magenta);white-space:nowrap;font-weight:600}
+/* ── Circles (slide 6) ── */
+.circles-wrap{position:relative;width:340px;height:340px;flex-shrink:0}
+.circle{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:600;text-align:center;transform:scale(0);transition:transform .5s ease;border:2px solid rgba(255,255,255,.3)}
+.c1{width:340px;height:340px;background:rgba(185,54,128,.15);border-color:var(--magenta);font-size:.9rem;color:rgba(255,255,255,.6);top:0;left:0}
+.c2{width:250px;height:250px;background:rgba(37,99,235,.2);border-color:#60A5FA;font-size:.85rem;top:45px;left:45px}
+.c3{width:170px;height:170px;background:rgba(124,58,237,.25);border-color:#A78BFA;font-size:.8rem;top:85px;left:85px}
+.c4{width:90px;height:90px;background:rgba(5,150,105,.35);border-color:#34D399;font-size:.7rem;top:125px;left:125px}
+/* ── Pipeline (slide 13) ── */
+.pipeline{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.pipe-step{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);
+  border-radius:8px;padding:.7rem 1rem;font-size:1rem;text-align:center;min-width:110px;
+  transition:all .4s;opacity:.35}
+.pipe-step.revealed{opacity:1;border-color:var(--magenta);background:rgba(185,54,128,.15)}
+.pipe-arrow{color:rgba(255,255,255,.4);font-size:1.4rem;flex-shrink:0}
+.pipe-step .step-icon{font-size:1.5rem;display:block}
+.pipe-desc{margin-top:.8rem;font-size:1rem;color:rgba(255,255,255,.75);min-height:2em;font-style:italic}
+/* ── Confusion matrix ── */
+.cm-wrap{display:grid;grid-template-columns:auto 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:4px;margin-top:.8rem;font-size:.95rem}
+.cm-header{background:transparent;display:flex;align-items:center;justify-content:center;padding:.4rem;font-weight:600;color:rgba(10,22,40,.7)}
+.cm-cell{padding:.8rem;border-radius:6px;text-align:center;line-height:1.3}
+.cm-tp{background:#DCFCE7;color:#166534}
+.cm-tn{background:#DCFCE7;color:#166534}
+.cm-fp{background:#FEE2E2;color:#991B1B}
+.cm-fn{background:#FEE2E2;color:#991B1B}
+.cm-row-label{display:flex;align-items:center;justify-content:flex-end;padding:.4rem .8rem;font-weight:600;font-size:.85rem;color:rgba(10,22,40,.7)}
+/* ── SHAP bars (slide 20) ── */
+.shap-row{display:flex;align-items:center;gap:.6rem;margin:.35rem 0}
+.shap-label{width:220px;text-align:right;font-size:.95rem;flex-shrink:0}
+.shap-bar-wrap{flex:1;display:flex;align-items:center;gap:.3rem}
+.shap-bar{height:22px;border-radius:3px;transition:width .5s ease}
+.shap-pos{background:#B93680}
+.shap-neg{background:#2563EB}
+.shap-val{font-size:.85rem;font-weight:600}
+/* ── Terminal block ── */
+.terminal{background:#0D1117;border-radius:8px;padding:1rem 1.4rem;font-family:monospace;
+  font-size:1rem;color:#58D68D;border:1px solid #30363D;margin:.8rem 0;line-height:1.7}
+.terminal .prompt{color:#58D68D}
+.terminal .comment{color:#8B949E}
+/* ── Objective cards (slide 4) ── */
+.obj-card{display:flex;gap:1.2rem;align-items:flex-start;padding:1.2rem 1.5rem;
+  background:rgba(255,255,255,.07);border-radius:10px;margin:.5rem 0;
+  border-left:4px solid var(--magenta);opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.obj-card.show{opacity:1;transform:translateY(0)}
+.obj-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--magenta);line-height:1;flex-shrink:0;font-weight:700}
+/* ── Ethical pillars (slide 33) ── */
+.pillar{background:rgba(255,255,255,.07);border-radius:10px;padding:1.2rem 1rem;text-align:center}
+.pillar .p-icon{font-size:2rem;display:block;margin-bottom:.5rem}
+.pillar .p-title{font-weight:700;font-size:1rem;color:var(--magenta);margin-bottom:.3rem}
+.pillar .p-desc{font-size:.85rem;color:rgba(255,255,255,.75);line-height:1.4}
+/* ── Presenter placeholder ── */
+.presenter-card{background:rgba(10,22,40,.06);border-radius:10px;padding:1.5rem;
+  text-align:center;border:1px solid rgba(10,22,40,.12)}
+.photo-placeholder{width:90px;height:90px;border-radius:50%;background:rgba(185,54,128,.2);
+  border:2px dashed var(--magenta);margin:0 auto .8rem;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;color:var(--magenta)}
+/* ── QR placeholder ── */
+.qr-box{width:150px;height:150px;border:3px dashed rgba(255,255,255,.4);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:.8rem;color:rgba(255,255,255,.5);flex-shrink:0;padding:.5rem}
+.light .qr-box{border-color:rgba(10,22,40,.3);color:rgba(10,22,40,.5)}
+/* ── Federated diagram ── */
+.fed-wrap{font-family:monospace;font-size:.95rem;line-height:1.5;
+  background:rgba(255,255,255,.05);border-radius:8px;padding:1rem 1.5rem;
+  color:rgba(255,255,255,.85);margin-top:.5rem;white-space:pre}
+/* ── Progress bar ── */
+#progress-bar{position:fixed;bottom:0;left:0;height:4px;background:var(--magenta);
+  transition:width .3s ease,background .3s ease;z-index:100}
+/* ── Counter ── */
+#slide-counter{position:fixed;bottom:10px;right:14px;font-size:.8rem;
+  color:rgba(255,255,255,.45);z-index:100;font-family:'Source Sans 3',sans-serif;
+  mix-blend-mode:normal}
+/* ── Sidebar ── */
+#sidebar{position:fixed;right:0;top:0;width:270px;height:100vh;
+  background:rgba(8,18,38,.97);backdrop-filter:blur(10px);
+  overflow-y:auto;transform:translateX(100%);transition:transform .3s ease;
+  z-index:200;padding:1rem 0;border-left:1px solid rgba(255,255,255,.08)}
+#sidebar.open{transform:translateX(0)}
+#sidebar h3{color:var(--magenta);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.5rem 1rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-item{display:block;padding:.45rem 1rem;font-size:.8rem;color:rgba(255,255,255,.6);
+  cursor:pointer;border-left:3px solid transparent;transition:all .2s;line-height:1.3}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nav-item.active{color:var(--magenta);border-left-color:var(--magenta);background:rgba(185,54,128,.08)}
+.nav-section{padding:.3rem 1rem .1rem;font-size:.7rem;color:rgba(255,255,255,.3);
+  text-transform:uppercase;letter-spacing:.08em;margin-top:.5rem}
+/* ── Help overlay ── */
+#help-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;
+  display:none;align-items:center;justify-content:center}
+#help-overlay.visible{display:flex}
+.help-box{background:#1a2740;border-radius:12px;padding:2rem;max-width:480px;width:90%}
+.help-box h2{font-family:'Playfair Display',serif;color:var(--magenta);margin-bottom:1rem}
+.shortcut-row{display:flex;justify-content:space-between;padding:.4rem 0;
+  border-bottom:1px solid rgba(255,255,255,.08);font-size:.95rem;color:rgba(255,255,255,.8)}
+.shortcut-row kbd{background:rgba(255,255,255,.12);border-radius:4px;padding:.1rem .4rem;
+  font-family:monospace;color:#fff;font-size:.85rem}
+/* ── Speaker notes ── */
+.notes{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,.95);
+  border-top:2px solid var(--magenta);padding:.8rem 2rem;font-size:.9rem;
+  color:rgba(255,255,255,.8);z-index:150;line-height:1.5;max-height:30vh;overflow-y:auto}
+body.notes-on .notes{display:block}
+/* ── Checklist ── */
+.checklist li{list-style:none;padding:.3rem 0;font-size:1.05rem;display:flex;gap:.7rem;align-items:baseline}
+.checklist li::before{content:"☐";color:var(--magenta);font-size:1.1rem;flex-shrink:0}
+/* ── Responsive ── */
+@media(max-width:900px){
+  .slide{padding:2rem 2.5rem 4rem}
+  .slide-title{font-size:1.8rem}
+  .grid-2x3{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr 1fr}
+}
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes growLine{from{width:0}to{width:100%}}
+.anim-1{animation:fadeUp .6s ease .1s both}
+.anim-2{animation:fadeUp .6s ease .3s both}
+.anim-3{animation:fadeUp .6s ease .5s both}
+.anim-4{animation:fadeUp .6s ease .7s both}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SLIDES
+═══════════════════════════════════════════ -->
+
+<!-- SLIDE 1: Title -->
+<div class="slide" id="slide-1" data-section="0">
+  <div style="position:absolute;top:2rem;left:3rem;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35)">PCYMH 2026 Workshop</div>
+  <div style="display:flex;gap:3rem;align-items:center;width:100%">
+    <div style="flex:1">
+      <div class="section-label" style="font-size:.9rem;margin-bottom:1rem">Practical Introduction to</div>
+      <h1 class="slide-title" style="font-size:3.2rem;margin-bottom:1.2rem">AI for Mental Health<br>Applications</h1>
+      <div style="height:3px;width:80px;background:var(--magenta);margin-bottom:1.5rem"></div>
+      <p style="font-size:1.15rem;color:rgba(255,255,255,.7);margin-bottom:.5rem">A Hands-On Workshop for Clinicians, Researchers &amp; Trainees</p>
+      <p style="font-size:1rem;color:rgba(255,255,255,.45);margin-top:1rem">📅 [DATE] &nbsp;|&nbsp; 📍 [VENUE]</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem">
+      <div class="qr-box">📱 Scan to open<br>notebooks</div>
+      <div style="font-size:.75rem;color:rgba(255,255,255,.4)">or visit [NOTEBOOK_URL]</div>
+    </div>
+  </div>
+  <div class="notes">Welcome attendees warmly. This is a practical session — half slides, half code. No coding experience needed. All materials are available via the QR code — encourage everyone to scan it now and open Notebook 1 in Google Colab while we do housekeeping.</div>
+</div>
+
+<!-- SLIDE 2: Housekeeping -->
+<div class="slide light" id="slide-2" data-section="0">
+  <div class="section-label">Before We Begin</div>
+  <h1 class="slide-title">Housekeeping</h1>
+  <div class="card-row" style="margin-top:.5rem">
+    <div class="card card-col" style="font-size:1.15rem;border-left:4px solid var(--magenta)">
+      <div>📶 <strong>WiFi:</strong> [WIFI_NETWORK]</div>
+      <div style="color:rgba(10,22,40,.6);font-size:1rem;margin-top:.3rem">Password: [WIFI_PASSWORD]</div>
+    </div>
+    <div class="card card-col" style="font-size:1.15rem;border-left:4px solid var(--magenta)">
+      🚻 <strong>Bathrooms:</strong> [LOCATION]
+    </div>
+  </div>
+  <div class="card-row" style="margin-top:.2rem">
+    <div class="card card-col" style="font-size:1.15rem;border-left:4px solid var(--magenta)">
+      ⏱️ <strong>Format:</strong> 75 minutes — slides + hands-on coding
+    </div>
+    <div class="card card-col" style="font-size:1.15rem;border-left:4px solid var(--magenta)">
+      💻 <strong>No coding experience needed</strong>
+    </div>
+  </div>
+  <div style="margin-top:1.2rem;background:rgba(185,54,128,.12);border:2px solid var(--magenta);border-radius:10px;padding:1rem 1.5rem">
+    <div style="font-weight:700;font-size:1.1rem;margin-bottom:.3rem">📓 Open Your Notebook Now</div>
+    <div style="font-family:monospace;font-size:1rem;color:var(--magenta)">[COLAB_URL_01]</div>
+    <div style="font-size:.9rem;color:rgba(10,22,40,.6);margin-top:.4rem">All code runs in your browser via Google Colab — nothing to install.</div>
+  </div>
+  <div class="notes">Confirm WiFi credentials are visible on the projector. Mention bathroom location. Emphasize the 75-minute format: "We'll move briskly — the goal is exposure and hands-on experience, not mastery today." Ask everyone to open the Colab link now while we continue with introductions.</div>
+</div>
+
+<!-- SLIDE 3: Presenters -->
+<div class="slide light" id="slide-3" data-section="0">
+  <div class="section-label">Who We Are</div>
+  <h1 class="slide-title">About the Presenters</h1>
+  <div class="card-row" style="margin-top:1rem">
+    <div class="presenter-card card-col">
+      <div class="photo-placeholder">👤</div>
+      <div style="font-weight:700;font-size:1.1rem">[PRESENTER NAME]</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">[ROLE]</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">[INSTITUTION]</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+    </div>
+    <div class="presenter-card card-col">
+      <div class="photo-placeholder">👤</div>
+      <div style="font-weight:700;font-size:1.1rem">[PRESENTER NAME]</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">[ROLE]</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">[INSTITUTION]</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+    </div>
+    <div class="presenter-card card-col">
+      <div class="photo-placeholder">👤</div>
+      <div style="font-weight:700;font-size:1.1rem">[PRESENTER NAME]</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">[ROLE]</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">[INSTITUTION]</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+    </div>
+  </div>
+  <div class="notes">Keep introductions to 30–45 seconds each. Mention your clinical or research context — the clinical anchor establishes credibility with this audience. Briefly describe the research group and what motivated this workshop.</div>
+</div>
+
+<!-- SLIDE 4: Learning Objectives -->
+<div class="slide" id="slide-4" data-section="0">
+  <div class="section-label">What You'll Walk Away With</div>
+  <h1 class="slide-title">By the End of This Workshop…</h1>
+  <div style="margin-top:1rem;width:100%;max-width:820px">
+    <div class="obj-card">
+      <div class="obj-num">01</div>
+      <div>
+        <div style="font-weight:600;font-size:1.15rem;margin-bottom:.3rem">Understand the Concepts</div>
+        <div style="font-size:1.05rem;color:rgba(255,255,255,.8)">Core AI and machine learning concepts and how they apply specifically to mental health research workflows.</div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">02</div>
+      <div>
+        <div style="font-weight:600;font-size:1.15rem;margin-bottom:.3rem">Develop Hands-On Skills</div>
+        <div style="font-size:1.05rem;color:rgba(255,255,255,.8)">Run simple AI models and explainability tools using guided code-along examples relevant to clinical datasets and questions.</div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">Click once to reveal objective 1, click again for objective 2. Emphasize: "Most workshops about AI in health don't have you running code. We do." If attendees leave able to explain what an ML model does and why SHAP matters for clinical AI, we've succeeded.</div>
+</div>
+
+<!-- SLIDE 5: Why AI Why Now -->
+<div class="slide" id="slide-5" data-section="1">
+  <div class="section-label">Section 1 — The AI Landscape</div>
+  <h1 class="slide-title">Why AI, Why Now?</h1>
+  <div class="card-row" style="margin-top:.6rem">
+    <div class="card card-col anim-1" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.8rem;margin-bottom:.4rem">📊</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.4rem">Data Volume</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,.8)">EHRs generate &gt;1 million data points per patient over a lifetime. We cannot analyze this manually.</div>
+    </div>
+    <div class="card card-col anim-2" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.8rem;margin-bottom:.4rem">⚡</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.4rem">Compute Power</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,.8)">GPUs and cloud computing made training large models affordable. A model that took a year to train in 2010 now takes hours.</div>
+    </div>
+    <div class="card card-col anim-3" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.8rem;margin-bottom:.4rem">🧠</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.4rem">Algorithmic Breakthroughs</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,.8)">Transformers, attention mechanisms, and self-supervised learning fundamentally changed what's possible.</div>
+    </div>
+  </div>
+  <div class="timeline-wrap anim-4">
+    <div class="timeline-line">
+      <div class="timeline-fill"></div>
+    </div>
+    <div class="timeline-dots">
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">1957</div><div class="t-dot-label">Perceptron</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">1980s</div><div class="t-dot-label">Expert Systems</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">2001</div><div class="t-dot-label">SVM</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">2012</div><div class="t-dot-label">Deep Learning</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">2017</div><div class="t-dot-label">Transformers</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">2022</div><div class="t-dot-label">LLMs</div></div>
+      <div class="t-dot"><div class="t-dot-circle"></div><div class="t-dot-year">2024+</div><div class="t-dot-label">Multimodal AI</div></div>
+    </div>
+  </div>
+  <div class="notes">The timeline animation starts automatically. Point to each milestone: "This is the arc from academic curiosity to clinical tool." Key message: "The convergence of data, compute, and algorithms happened in the last decade — that is why we're having this conversation now."</div>
+</div>
+
+<!-- SLIDE 6: AI Vocabulary -->
+<div class="slide light" id="slide-6" data-section="1">
+  <div class="section-label">Section 1 — The AI Landscape</div>
+  <h1 class="slide-title">Let's Get the Terminology Straight</h1>
+  <div style="display:flex;gap:3rem;align-items:center;margin-top:.8rem;width:100%">
+    <div class="circles-wrap" style="flex-shrink:0">
+      <div class="circle c1">AI</div>
+      <div class="circle c2" style="color:#fff">Machine Learning</div>
+      <div class="circle c3" style="color:#fff">Deep Learning</div>
+      <div class="circle c4" style="color:#fff;font-size:.6rem">LLMs</div>
+    </div>
+    <div style="flex:1">
+      <div style="margin-bottom:1rem">
+        <div style="font-weight:700;color:var(--magenta);font-size:1.05rem">🔵 Artificial Intelligence</div>
+        <div style="font-size:.95rem;color:rgba(10,22,40,.75)">Any technique enabling machines to simulate human-like reasoning or decision-making.</div>
+      </div>
+      <div style="margin-bottom:1rem">
+        <div style="font-weight:700;color:#2563EB;font-size:1.05rem">🟣 Machine Learning</div>
+        <div style="font-size:.95rem;color:rgba(10,22,40,.75)">AI that learns patterns from data — no explicit programming of rules.</div>
+      </div>
+      <div style="margin-bottom:1rem">
+        <div style="font-weight:700;color:#7C3AED;font-size:1.05rem">🟢 Deep Learning</div>
+        <div style="font-size:.95rem;color:rgba(10,22,40,.75)">ML using neural networks with many layers — excels at images, speech, text.</div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:#059669;font-size:1.05rem">⚡ Foundation Models / LLMs</div>
+        <div style="font-size:.95rem;color:rgba(10,22,40,.75)">Large models trained on internet-scale text. GPT-4, Llama 3, Gemma. Can follow instructions, reason, summarize — all with one model.</div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">The concentric circles animate in from outside to inside. Be clear: "An LLM is a type of deep learning model, which is a type of ML, which is a type of AI." This hierarchy helps cut through marketing language — challenge the audience to ask vendors exactly what kind of AI they're selling.</div>
+</div>
+
+<!-- SLIDE 7: AI in Healthcare -->
+<div class="slide" id="slide-7" data-section="1">
+  <div class="section-label">Section 1 — The AI Landscape</div>
+  <h1 class="slide-title">AI Applications in Clinical Medicine</h1>
+  <div class="grid-2x3" style="margin-top:.8rem">
+    <div class="domain-card highlight">
+      <span class="icon">🔬</span>
+      <strong>Early Detection</strong>
+      <div style="font-size:.8rem;margin-top:.3rem;color:rgba(255,255,255,.7)">Today's focus ★</div>
+    </div>
+    <div class="domain-card highlight">
+      <span class="icon">📊</span>
+      <strong>Risk Stratification</strong>
+      <div style="font-size:.8rem;margin-top:.3rem;color:rgba(255,255,255,.7)">Today's focus ★</div>
+    </div>
+    <div class="domain-card" style="opacity:.55">
+      <span class="icon">🩺</span>
+      <strong>Clinical Decision Support</strong>
+    </div>
+    <div class="domain-card" style="opacity:.55">
+      <span class="icon">🌐</span>
+      <strong>Population Surveillance</strong>
+    </div>
+    <div class="domain-card" style="opacity:.55">
+      <span class="icon">💊</span>
+      <strong>Drug Discovery</strong>
+    </div>
+    <div class="domain-card" style="opacity:.55">
+      <span class="icon">🧬</span>
+      <strong>Precision Medicine</strong>
+    </div>
+  </div>
+  <div style="margin-top:1.2rem;font-size:1rem;color:rgba(255,255,255,.65)">
+    ★ Today's focus: <span style="color:var(--magenta);font-weight:600">Early Detection &amp; Risk Stratification</span> in youth mental health
+  </div>
+  <div class="notes">The highlighted cards orient the rest of the workshop. Make explicit: "Everything we do today serves these two applications in youth mental health." The other four domains are real and growing, but we focus where the clinical AI evidence base is strongest.</div>
+</div>
+
+<!-- SLIDE 8: Mental Health AI -->
+<div class="slide light" id="slide-8" data-section="1">
+  <div class="section-label">Section 1 — The AI Landscape</div>
+  <h1 class="slide-title">AI in Youth Mental Health: Real Applications</h1>
+  <div class="grid-2" style="margin-top:.8rem">
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.3rem;margin-bottom:.4rem">🗣️</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Depression Detection from Speech/Text</div>
+      <div style="font-size:.92rem;color:rgba(10,22,40,.75)">NLP models analyze clinical interview transcripts for linguistic markers of depression — reduced lexical diversity, hopelessness-related language, slowed speech rate.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.3rem;margin-bottom:.4rem">🧩</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">ASD Screening from Behavioral Data</div>
+      <div style="font-size:.92rem;color:rgba(10,22,40,.75)">ML classifiers trained on standardized assessments (ADOS, SRS, SCQ) identify children likely to receive an ASD diagnosis. <em>This is exactly what Notebook 1 demonstrates.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.3rem;margin-bottom:.4rem">📝</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Suicide Risk from Clinical Notes</div>
+      <div style="font-size:.92rem;color:rgba(10,22,40,.75)">NLP models extract risk signals from free-text clinical notes, enabling systematic surveillance across large patient populations.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.3rem;margin-bottom:.4rem">⌚</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Anxiety Prediction from Wearables</div>
+      <div style="font-size:.92rem;color:rgba(10,22,40,.75)">Heart rate variability and sleep data from consumer wearables predict anxiety episodes in adolescents with 70–85% accuracy in research settings.</div>
+    </div>
+  </div>
+  <div class="warning-box">⚠️ All of these require clinical validation before deployment. AI <strong>augments</strong> — it does not replace — clinical judgment.</div>
+  <div class="notes">Read the warning box aloud. "Every application on this slide has peer-reviewed evidence behind it. And every application requires extensive prospective validation before deployment. Both things are true simultaneously." The ASD example is the direct bridge to Notebook 1.</div>
+</div>
+
+<!-- SLIDE 9: LLMs -->
+<div class="slide" id="slide-9" data-section="1">
+  <div class="section-label">Section 1 — The AI Landscape</div>
+  <h1 class="slide-title">The Current Moment: Large Language Models</h1>
+  <div class="grid-2" style="margin-top:.8rem">
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:1.1rem;margin-bottom:.8rem">What Makes LLMs Different</div>
+      <ul style="list-style:none;font-size:1rem;line-height:1.8;color:rgba(255,255,255,.85)">
+        <li>✦ Trained on trillions of tokens of text</li>
+        <li>✦ Follow instructions, reason, summarize, extract — <em>one model, many tasks</em></li>
+        <li>✦ No task-specific training data required</li>
+        <li>✦ Emergent capabilities at scale</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:1.1rem;margin-bottom:.8rem">Key Model Families</div>
+      <div class="card" style="margin-bottom:.6rem;font-size:.95rem">
+        <strong>GPT-4</strong> (OpenAI) — Cloud only, powerful, proprietary
+      </div>
+      <div class="card" style="margin-bottom:.6rem;font-size:.95rem">
+        <strong>Llama 3</strong> (Meta) — Open-weight, runs locally 🔒
+      </div>
+      <div class="card" style="font-size:.95rem">
+        <strong>Gemma 3</strong> (Google) — Open-weight, efficient on laptops 🔒
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:1.2rem;background:rgba(185,54,128,.15);border:2px solid var(--magenta);border-radius:10px;padding:1rem 1.5rem;font-size:1rem">
+    🔐 <strong>In Notebook 3:</strong> We'll run a local LLM on your own machine — no data leaves the building. This is the privacy-preserving approach required for real patient data.
+  </div>
+  <div class="notes">The 'open-weight' distinction is critical for clinical use — that's the entire premise of Notebook 3. "Llama 3 from Meta runs on your laptop. GPT-4 from OpenAI does not. That difference matters enormously when your data includes patient information."</div>
+</div>
+
+<!-- SLIDE 10: ML Section Header -->
+<div class="slide" id="slide-10" data-section="2">
+  <div style="text-align:center;width:100%">
+    <div class="section-label" style="text-align:center;font-size:1rem;margin-bottom:.8rem">Section 2</div>
+    <h1 class="slide-title" style="font-size:3.5rem;text-align:center;margin-bottom:1.5rem">Machine Learning<br>Fundamentals</h1>
+    <div style="height:3px;width:80px;background:var(--magenta);margin:0 auto 2rem"></div>
+    <div style="display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
+      <div style="text-align:center"><div style="font-size:1.8rem">🔄</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">The ML Paradigm</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">📊</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Types of ML</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">⚙️</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">The ML Pipeline</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">📈</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Model Evaluation</div></div>
+    </div>
+  </div>
+  <div class="notes">Brief pause. Announce the section. "This section is conceptually dense — but the notebook exercises will make it concrete. Don't worry about memorizing everything now."</div>
+</div>
+
+<!-- SLIDE 11: ML Paradigm -->
+<div class="slide light" id="slide-11" data-section="2">
+  <div class="section-label">Section 2 — ML Fundamentals</div>
+  <h1 class="slide-title">How Machine Learning Actually Works</h1>
+  <div class="grid-2" style="margin-top:1rem;align-items:stretch">
+    <div style="background:rgba(10,22,40,.05);border-radius:10px;padding:1.5rem;border:2px solid rgba(10,22,40,.12)">
+      <div style="font-weight:700;font-size:1.15rem;margin-bottom:1rem;color:rgba(10,22,40,.9)">🏛️ Traditional Programming</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;align-items:center;font-size:.95rem;text-align:center">
+        <div style="background:rgba(37,99,235,.1);border:1px solid #2563EB;border-radius:6px;padding:.4rem .8rem;width:100%">📋 Rules (written by expert)</div>
+        <div>+</div>
+        <div style="background:rgba(37,99,235,.1);border:1px solid #2563EB;border-radius:6px;padding:.4rem .8rem;width:100%">📁 Input Data</div>
+        <div style="font-size:1.2rem">↓</div>
+        <div style="background:rgba(37,99,235,.2);border:2px solid #2563EB;border-radius:6px;padding:.4rem .8rem;width:100%;font-weight:600">📤 Output / Prediction</div>
+      </div>
+      <div style="margin-top:.8rem;font-size:.85rem;color:rgba(10,22,40,.55);font-style:italic">"IF PHQ-9 ≥ 10 AND sleep &lt; 6h THEN flag as at-risk"</div>
+    </div>
+    <div style="background:rgba(185,54,128,.06);border-radius:10px;padding:1.5rem;border:2px solid var(--magenta)">
+      <div style="font-weight:700;font-size:1.15rem;margin-bottom:1rem;color:var(--magenta)">🤖 Machine Learning</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;align-items:center;font-size:.95rem;text-align:center">
+        <div style="background:rgba(185,54,128,.1);border:1px solid var(--magenta);border-radius:6px;padding:.4rem .8rem;width:100%">📁 Input Data + Outcomes</div>
+        <div style="font-size:1.2rem">↓</div>
+        <div style="background:rgba(185,54,128,.15);border:2px solid var(--magenta);border-radius:6px;padding:.4rem .8rem;width:100%;font-weight:600">🤖 Algorithm Learns Rules</div>
+        <div style="font-size:1.2rem">↓</div>
+        <div style="background:rgba(185,54,128,.1);border:1px solid var(--magenta);border-radius:6px;padding:.4rem .8rem;width:100%">📤 Predictions on New Data</div>
+      </div>
+      <div style="margin-top:.8rem;font-size:.85rem;color:rgba(10,22,40,.55);font-style:italic">"Feed 10,000 records → model discovers which patterns predict relapse"</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-size:1.05rem;color:rgba(10,22,40,.8);font-weight:600;text-align:center">The machine discovers the rules. We provide the examples.</div>
+  <div class="notes">This is the most important conceptual slide. "Traditional programming: a human writes the rules. ML: the algorithm discovers the rules from examples." Use the analogy: "Traditional programming is like writing a recipe. ML is like watching a chef cook 10,000 meals and inferring the recipe from observations."</div>
+</div>
+
+<!-- SLIDE 12: Types of ML -->
+<div class="slide" id="slide-12" data-section="2">
+  <div class="section-label">Section 2 — ML Fundamentals</div>
+  <h1 class="slide-title">Three Flavors of Machine Learning</h1>
+  <div class="grid-3" style="margin-top:.8rem">
+    <div style="background:rgba(185,54,128,.15);border:2px solid var(--magenta);border-radius:10px;padding:1.3rem;position:relative">
+      <div style="position:absolute;top:-12px;right:12px;background:var(--magenta);color:#fff;font-size:.75rem;padding:.2rem .6rem;border-radius:20px;font-weight:600">TODAY'S FOCUS</div>
+      <div style="font-size:1.5rem;margin-bottom:.5rem">🎯</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.5rem">Supervised</div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">Learns from labeled examples (input + correct answer).</div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.15);padding-top:.6rem"><em>Example:</em> Predict depression relapse from PHQ-9 trajectory &amp; demographics</div>
+    </div>
+    <div class="card">
+      <div style="font-size:1.5rem;margin-bottom:.5rem">🔍</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.5rem">Unsupervised</div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">Finds hidden structure in unlabeled data.</div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem"><em>Example:</em> Cluster 10,000 youth mental health patients into phenotypic subtypes</div>
+    </div>
+    <div class="card">
+      <div style="font-size:1.5rem;margin-bottom:.5rem">🎮</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.5rem">Reinforcement Learning</div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">Agent learns by trial and error to maximize a reward signal.</div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem"><em>Example:</em> Personalize treatment sequences for adolescents with treatment-resistant depression</div>
+    </div>
+  </div>
+  <div class="notes">Focus on supervised learning — that's what Notebook 1 uses. Unsupervised is powerful for phenotyping (identifying patient subgroups). Reinforcement learning is more niche in clinical settings. Quick show of hands: "Who has heard of reinforcement learning before?" — good audience engagement moment.</div>
+</div>
+
+<!-- SLIDE 13: ML Pipeline -->
+<div class="slide light" id="slide-13" data-section="2">
+  <div class="section-label">Section 2 — ML Fundamentals</div>
+  <h1 class="slide-title">The Supervised ML Pipeline</h1>
+  <p style="font-size:.95rem;color:rgba(10,22,40,.6);margin-bottom:.8rem">Press <kbd style="background:rgba(10,22,40,.1);border-radius:3px;padding:.1rem .4rem;font-family:monospace">Space</kbd> or click to reveal each step</p>
+  <div class="pipeline">
+    <div class="pipe-step" id="ps0"><span class="step-icon">📁</span>Raw Data</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step" id="ps1"><span class="step-icon">🧹</span>Preprocessing</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step" id="ps2"><span class="step-icon">🔧</span>Feature Engineering</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step" id="ps3"><span class="step-icon">🤖</span>Model Training</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step" id="ps4"><span class="step-icon">📊</span>Evaluation</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step" id="ps5"><span class="step-icon">🚀</span>Deployment</div>
+  </div>
+  <div class="pipe-desc" style="color:rgba(10,22,40,.7)">Click to reveal each pipeline step…</div>
+  <div style="margin-top:1.2rem;font-size:.95rem;color:rgba(10,22,40,.6)">
+    📓 Notebooks 1 &amp; 2 cover <span style="color:var(--magenta);font-weight:600">Steps 1–5</span>. Deployment requires regulatory approval, EHR integration, and ongoing monitoring.
+  </div>
+  <div class="notes">Use click-to-reveal deliberately — one step per spacebar press. At each step ask: "Where could this go wrong? Where does clinical expertise matter most?" Preprocessing: data quality. Feature engineering: domain knowledge. Evaluation: choosing the right metric. At Deployment: "Most academic research stops at step 5. Deployment is where the real work begins."</div>
+</div>
+
+<!-- SLIDE 14: Key Concepts -->
+<div class="slide" id="slide-14" data-section="2">
+  <div class="section-label">Section 2 — ML Fundamentals</div>
+  <h1 class="slide-title">Three Concepts Every Clinician Needs</h1>
+  <div class="grid-3" style="margin-top:.8rem">
+    <div class="card">
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.6rem">📂 Train / Val / Test Split</div>
+      <div style="font-size:.9rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">Train the model on 80% of data, evaluate on a held-out 20%. <strong>Never test on data the model has seen</strong> — like testing a student on the exact practice problems.</div>
+      <div style="display:flex;gap:4px;height:18px;border-radius:4px;overflow:hidden;margin-top:auto">
+        <div style="flex:8;background:var(--magenta);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#fff;font-weight:700">TRAIN 80%</div>
+        <div style="flex:1;background:#7C3AED;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff">VAL</div>
+        <div style="flex:1;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff">TEST</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.6rem">📉 Overfitting vs Underfitting</div>
+      <div style="font-size:.9rem;color:rgba(255,255,255,.8);margin-bottom:.6rem"><strong>Overfitting:</strong> Memorizes training data, fails on new patients.<br><strong>Underfitting:</strong> Too simple to capture real patterns.</div>
+      <div style="font-size:.85rem;background:rgba(255,255,255,.07);border-radius:6px;padding:.5rem;text-align:center">
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.6)"><span>Under-<br>fitting</span><span>Sweet<br>Spot ✓</span><span>Over-<br>fitting</span></div>
+        <div style="height:2px;background:linear-gradient(to right,#D1A6AD,#059669,#D1A6AD);border-radius:2px;margin:.4rem 0"></div>
+        <div style="font-size:.75rem;color:rgba(255,255,255,.5)">← Model Complexity →</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.6rem">🔄 Cross-Validation</div>
+      <div style="font-size:.9rem;color:rgba(255,255,255,.8);margin-bottom:.6rem">Instead of one train/test split, rotate through 5 different splits. Gives more reliable performance estimates, especially with small clinical datasets.</div>
+      <div style="font-size:.8rem">
+        <div style="display:flex;gap:2px;margin:.2rem 0">
+          <div style="flex:1;height:12px;background:#2563EB;border-radius:2px"></div>
+          <div style="flex:4;height:12px;background:var(--magenta);border-radius:2px"></div>
+        </div>
+        <div style="display:flex;gap:2px;margin:.2rem 0">
+          <div style="flex:1;height:12px;background:var(--magenta);border-radius:2px"></div>
+          <div style="flex:1;height:12px;background:#2563EB;border-radius:2px"></div>
+          <div style="flex:3;height:12px;background:var(--magenta);border-radius:2px"></div>
+        </div>
+        <div style="display:flex;gap:2px;margin:.2rem 0">
+          <div style="flex:2;height:12px;background:var(--magenta);border-radius:2px"></div>
+          <div style="flex:1;height:12px;background:#2563EB;border-radius:2px"></div>
+          <div style="flex:2;height:12px;background:var(--magenta);border-radius:2px"></div>
+        </div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.3rem;text-align:center">Blue = test fold each round</div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">"The bias-variance tradeoff is why we can't just train on all our data — we'd memorize the training set instead of learning the underlying pattern." Cross-validation is especially important in mental health datasets, which are often small (n &lt; 1000). Overfitting is the silent killer of ML models that never reach clinical use.</div>
+</div>
+
+<!-- SLIDE 15: Evaluation Metrics -->
+<div class="slide light" id="slide-15" data-section="2">
+  <div class="section-label">Section 2 — ML Fundamentals</div>
+  <h1 class="slide-title">How Do We Know if Our Model Is Good?</h1>
+  <div class="grid-2" style="margin-top:.7rem;align-items:start">
+    <div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.6rem;color:rgba(10,22,40,.8)">Confusion Matrix</div>
+      <div class="cm-wrap">
+        <div></div>
+        <div class="cm-header">Predicted: Control</div>
+        <div class="cm-header">Predicted: ASD</div>
+        <div class="cm-row-label">True:<br>Control</div>
+        <div class="cm-cell cm-tn"><strong>TN</strong><br><small>True Negative</small><br>✓ Correct</div>
+        <div class="cm-cell cm-fp"><strong>FP</strong><br><small>False Positive</small><br>✗ False alarm</div>
+        <div class="cm-row-label">True:<br>ASD</div>
+        <div class="cm-cell cm-fn"><strong>FN</strong><br><small>False Negative</small><br>✗ Missed case</div>
+        <div class="cm-cell cm-tp"><strong>TP</strong><br><small>True Positive</small><br>✓ Correct</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.6rem;color:rgba(10,22,40,.8)">Key Metrics</div>
+      <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+        <tr style="background:rgba(10,22,40,.06)">
+          <td style="padding:.4rem .6rem;font-weight:700">Accuracy</td>
+          <td style="padding:.4rem .6rem;color:rgba(10,22,40,.7)">(TP+TN) / Total — "Is it right overall?"</td>
+        </tr>
+        <tr>
+          <td style="padding:.4rem .6rem;font-weight:700">Precision</td>
+          <td style="padding:.4rem .6rem;color:rgba(10,22,40,.7)">TP/(TP+FP) — "When it flags ASD, is it right?"</td>
+        </tr>
+        <tr style="background:rgba(10,22,40,.06)">
+          <td style="padding:.4rem .6rem;font-weight:700">Recall</td>
+          <td style="padding:.4rem .6rem;color:rgba(10,22,40,.7)">TP/(TP+FN) — "Does it catch all ASD cases?"</td>
+        </tr>
+        <tr>
+          <td style="padding:.4rem .6rem;font-weight:700">F1 Score</td>
+          <td style="padding:.4rem .6rem;color:rgba(10,22,40,.7)">Harmonic mean of precision &amp; recall</td>
+        </tr>
+        <tr style="background:rgba(10,22,40,.06)">
+          <td style="padding:.4rem .6rem;font-weight:700">AUC-ROC</td>
+          <td style="padding:.4rem .6rem;color:rgba(10,22,40,.7)">Overall discriminative ability (0.5–1.0)</td>
+        </tr>
+      </table>
+      <div class="warning-box" style="margin-top:.8rem">
+        ⚠️ <strong>Accuracy is misleading</strong> for rare disorders. If only 5% of patients have ASD, a model that always says "No ASD" is 95% accurate — and clinically useless. <strong>Always report AUC and F1.</strong>
+      </div>
+    </div>
+  </div>
+  <div class="notes">Memorize the four quadrants — everything else follows. Read the warning box very slowly with emphasis. "A model that always says 'no depression' would be 95% accurate in a general population — and completely useless clinically." This is where clinical expertise is critical: the right metric depends entirely on the clinical question.</div>
+</div>
+
+<!-- SLIDE 16: Notebook 1 Callout -->
+<div class="slide callout" id="slide-16" data-section="2">
+  <div style="width:100%;max-width:800px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:2rem;margin-bottom:.5rem">💻</div>
+      <h1 class="slide-title" style="font-size:2.8rem;text-align:center">Let's Code It!</h1>
+      <div style="color:rgba(255,255,255,.6);font-size:1rem">Building an ASD classifier from behavioral assessment data</div>
+    </div>
+    <div class="terminal">
+      <div class="prompt">→ <strong style="color:#fff">Notebook 1: ML Foundations</strong></div>
+      <div style="margin-top:.4rem;color:#8B949E">Open in Google Colab:</div>
+      <div style="color:#F0E68C;margin:.2rem 0">[COLAB_URL_01]</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;font-size:1.05rem">
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">1</span> Open the Colab link (or scan QR code)</div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">2</span> Click <strong>Runtime → Run All</strong> to set up environment (~60 sec)</div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">3</span> Work through each cell — pause at <code style="background:rgba(255,255,255,.1);padding:.1rem .4rem;border-radius:3px"># EXERCISE</code> comments</div>
+    </div>
+    <div style="margin-top:1.2rem;background:rgba(255,255,255,.08);border-radius:8px;padding:.8rem 1.2rem;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:rgba(255,255,255,.75);font-size:.95rem">You'll train a model to identify ASD from behavioral assessments</span>
+      <span style="background:var(--magenta);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.9rem;font-weight:600;flex-shrink:0;margin-left:1rem">⏱️ 13 min</span>
+    </div>
+  </div>
+  <div class="notes">Transition with energy — get attendees excited. Switch to browser, open Colab Notebook 1. Run the setup cell live. "While this installs — about 60 seconds — read the markdown. The comments explain every line." Key pause point after the confusion matrix cell: "Is 80% accuracy good enough for a clinical screening tool?"</div>
+</div>
+
+<!-- SLIDE 17: Explainability Section Header -->
+<div class="slide" id="slide-17" data-section="3">
+  <div style="text-align:center;width:100%">
+    <div class="section-label" style="text-align:center;font-size:1rem;margin-bottom:.8rem">Section 3</div>
+    <h1 class="slide-title" style="font-size:3rem;text-align:center;margin-bottom:1.5rem">Explainability,<br>Bias &amp; Ethics</h1>
+    <div style="height:3px;width:80px;background:var(--magenta);margin:0 auto 2rem"></div>
+    <div style="display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
+      <div style="text-align:center"><div style="font-size:1.8rem">🔍</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">The Black Box Problem</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">⚖️</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">SHAP Values</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">🚨</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Bias &amp; Fairness</div></div>
+    </div>
+  </div>
+  <div class="notes">This section is arguably the most important for clinical adoption. "Without explainability, models remain toys — impressive demonstrations that never reach patients." The regulatory and liability landscape is rapidly demanding explainability as a baseline requirement.</div>
+</div>
+
+<!-- SLIDE 18: Black Box Problem -->
+<div class="slide light" id="slide-18" data-section="3">
+  <div class="section-label">Section 3 — Explainability &amp; Ethics</div>
+  <h1 class="slide-title">The Black Box Problem</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:start">
+    <div style="text-align:center">
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;font-size:1rem;flex-wrap:wrap">
+        <div style="background:rgba(10,22,40,.07);border-radius:8px;padding:.8rem;text-align:center">
+          <div style="font-size:2rem">🧠</div><div style="font-size:.8rem;margin-top:.3rem">Brain scan</div>
+        </div>
+        <div style="font-size:1.5rem;color:rgba(10,22,40,.3)">→</div>
+        <div style="background:var(--navy);color:#fff;border-radius:8px;padding:.8rem 1.2rem;text-align:center;min-width:100px">
+          <div style="font-size:1.5rem">⬛</div><div style="font-size:.75rem;margin-top:.3rem;color:rgba(255,255,255,.7)">ML Model</div>
+        </div>
+        <div style="font-size:1.5rem;color:rgba(10,22,40,.3)">→</div>
+        <div style="background:rgba(185,54,128,.1);border:2px solid var(--magenta);border-radius:8px;padding:.8rem;text-align:center">
+          <div style="font-size:.85rem;font-weight:700;color:var(--magenta)">ASD: 87%</div>
+        </div>
+      </div>
+      <div style="margin-top:1.2rem;font-size:2rem;font-weight:700;color:var(--magenta)">But… WHY? 🤔</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.6);margin-top:.4rem">Which features drove this? Is it clinically valid?<br>Could there be a spurious correlation?</div>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.8rem;color:rgba(10,22,40,.8)">What clinicians need to know:</div>
+      <ul style="list-style:none;font-size:.95rem;line-height:1.8;color:rgba(10,22,40,.75)">
+        <li>✦ Justification for the decision</li>
+        <li>✦ Which features drove the prediction</li>
+        <li>✦ How confident is the model (and why)</li>
+        <li>✦ What would change the outcome</li>
+      </ul>
+      <div style="font-weight:700;font-size:1rem;margin:1rem 0 .6rem;color:rgba(10,22,40,.8)">What regulators require:</div>
+      <div class="warning-box">
+        📋 FDA (2021) AI/ML Action Plan requires <strong>transparency documentation</strong> for clinical decision support tools.<br><br>
+        🇨🇦 Health Canada guidance on AI/ML in health expects explainability as a baseline.
+      </div>
+      <div style="font-size:.8rem;color:rgba(10,22,40,.5);margin-top:.5rem">Ref: FDA. (2021). AI/ML-Based Software as a Medical Device Action Plan.</div>
+    </div>
+  </div>
+  <div class="notes">"A clinician who doesn't understand why a model made a recommendation cannot be held accountable for acting on it — and shouldn't be." Complex models can pick up on spurious correlations in training data — for example, scanner manufacturer ID in neuroimaging studies. Without explainability tools, we can't detect this.</div>
+</div>
+
+<!-- SLIDE 19: Explainability Methods -->
+<div class="slide" id="slide-19" data-section="3">
+  <div class="section-label">Section 3 — Explainability &amp; Ethics</div>
+  <h1 class="slide-title">Two Levels of Explanation</h1>
+  <div class="grid-2" style="margin-top:.8rem">
+    <div class="card" style="border-top:4px solid #2563EB">
+      <div style="font-size:1.4rem;margin-bottom:.4rem">🌍</div>
+      <div style="font-weight:700;font-size:1.1rem;color:#60A5FA;margin-bottom:.6rem">Global Explainability</div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">"How does the model work <em>overall</em>? Which features does it rely on most across all predictions?"</div>
+      <div style="font-size:.85rem;font-style:italic;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem">Example: "Age and SRS score are the most important predictors on average across 500 patients."</div>
+      <div style="margin-top:.8rem">
+        <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-bottom:.3rem">Feature importance (mock)</div>
+        <div style="font-size:.8rem">
+          <div style="display:flex;align-items:center;gap:.4rem;margin:.2rem 0"><span style="width:80px;text-align:right;font-size:.7rem">SRS</span><div style="height:10px;width:85%;background:var(--magenta);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;gap:.4rem;margin:.2rem 0"><span style="width:80px;text-align:right;font-size:.7rem">ADOS</span><div style="height:10px;width:70%;background:var(--magenta);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;gap:.4rem;margin:.2rem 0"><span style="width:80px;text-align:right;font-size:.7rem">AGE</span><div style="height:10px;width:40%;background:rgba(185,54,128,.5);border-radius:2px"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--magenta)">
+      <div style="font-size:1.4rem;margin-bottom:.4rem">🎯</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--magenta);margin-bottom:.6rem">Local Explainability</div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:.8rem">"Why did the model give <em>this specific patient</em> this score? What can a clinician act on?"</div>
+      <div style="font-size:.85rem;font-style:italic;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem">Example: "For patient #042: high SRS score pushed prediction toward ASD; low age pulled it back."</div>
+      <div style="margin-top:.8rem;background:rgba(255,255,255,.06);border-radius:6px;padding:.6rem;font-size:.8rem">
+        <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-bottom:.4rem">Waterfall for patient #042</div>
+        <div>Baseline: 0.42 → <strong style="color:var(--magenta)">SRS +0.28</strong> → <strong style="color:#60A5FA">age -0.08</strong> → Pred: <strong>0.62</strong></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:1rem;text-align:center;font-size:1.1rem;font-weight:600;color:var(--magenta)">
+    SHAP (SHapley Additive exPlanations) provides both — grounded in cooperative game theory → Notebook 2
+  </div>
+  <div class="notes">"Global explanations are useful for model validation and research reporting. Local explanations are what clinicians actually need at the point of care — 'why is the model flagging this child?'" The distinction maps directly to the two types of clinical use: population-level model auditing vs. individual decision support.</div>
+</div>
+
+<!-- SLIDE 20: SHAP in Plain English -->
+<div class="slide light" id="slide-20" data-section="3">
+  <div class="section-label">Section 3 — Explainability &amp; Ethics</div>
+  <h1 class="slide-title">SHAP: The Intuition</h1>
+  <div style="background:rgba(185,54,128,.08);border-left:4px solid var(--magenta);border-radius:0 8px 8px 0;padding:1rem 1.5rem;margin-bottom:1.2rem;font-size:1.05rem;font-style:italic;color:rgba(10,22,40,.8)">
+    "Imagine a team of doctors making a diagnosis by committee. SHAP asks: if we removed each doctor one at a time, how much would the diagnosis change? That change is each doctor's contribution — SHAP does the same for model features."
+  </div>
+  <div style="font-weight:700;font-size:1rem;margin-bottom:.8rem;color:rgba(10,22,40,.8)">Example — hypothetical patient predicted as <span style="color:var(--magenta)">High Risk (0.78)</span></div>
+  <div style="background:rgba(10,22,40,.04);border-radius:8px;padding:1rem 1.2rem">
+    <div style="display:flex;align-items:center;margin-bottom:.5rem;font-size:.8rem;color:rgba(10,22,40,.5)">
+      <span style="width:230px;text-align:right;padding-right:.8rem">Feature (value)</span>
+      <span style="flex:1;text-align:center">← Toward Control &nbsp;|&nbsp; Toward ASD →</span>
+    </div>
+    <div class="shap-row">
+      <div class="shap-label">PHQ-9 Score (16)</div>
+      <div class="shap-bar-wrap">
+        <div style="width:50%;text-align:right;padding-right:.3rem;font-size:.8rem;color:rgba(10,22,40,.4)">0</div>
+        <div class="shap-bar shap-pos" style="width:130px"></div>
+        <div class="shap-val" style="color:var(--magenta)">+0.35</div>
+      </div>
+    </div>
+    <div class="shap-row">
+      <div class="shap-label">Social Isolation (8/10)</div>
+      <div class="shap-bar-wrap">
+        <div style="width:50%;text-align:right;padding-right:.3rem;font-size:.8rem;color:rgba(10,22,40,.4)">0</div>
+        <div class="shap-bar shap-pos" style="width:90px"></div>
+        <div class="shap-val" style="color:var(--magenta)">+0.22</div>
+      </div>
+    </div>
+    <div class="shap-row">
+      <div class="shap-label">Sleep Hours (4.5h)</div>
+      <div class="shap-bar-wrap">
+        <div style="width:50%;text-align:right;padding-right:.3rem;font-size:.8rem;color:rgba(10,22,40,.4)">0</div>
+        <div class="shap-bar shap-pos" style="width:70px"></div>
+        <div class="shap-val" style="color:var(--magenta)">+0.18</div>
+      </div>
+    </div>
+    <div class="shap-row">
+      <div class="shap-label">Age (17)</div>
+      <div class="shap-bar-wrap">
+        <div style="width:calc(50% - 48px);text-align:right;padding-right:.3rem;font-size:.8rem;color:rgba(10,22,40,.4)"></div>
+        <div class="shap-bar shap-neg" style="width:48px"></div>
+        <div style="width:50%;padding-left:.3rem;font-size:.8rem;color:rgba(10,22,40,.4)">0</div>
+        <div class="shap-val" style="color:#2563EB">−0.12</div>
+      </div>
+    </div>
+    <div style="font-size:.8rem;color:rgba(10,22,40,.55);margin-top:.6rem;border-top:1px solid rgba(10,22,40,.1);padding-top:.5rem">Positive SHAP = pushes toward ASD &nbsp;|&nbsp; Negative SHAP = pushes toward Control &nbsp;|&nbsp; Baseline prediction = 0.42</div>
+  </div>
+  <div class="notes">Walk through the bar chart carefully. "Positive SHAP value pushes the prediction toward the outcome we're predicting. Negative pulls away from it. The magnitude is the strength of that push." The PHQ-9 contributing most strongly matches clinical intuition — this is a key validation signal.</div>
+</div>
+
+<!-- SLIDE 21: Bias and Fairness -->
+<div class="slide" id="slide-21" data-section="3">
+  <div class="section-label">Section 3 — Explainability &amp; Ethics</div>
+  <h1 class="slide-title">Bias &amp; Fairness in Mental Health AI</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:start">
+    <div>
+      <div style="font-weight:700;color:var(--warning);font-size:1rem;margin-bottom:.8rem">⚠️ Specific Risks</div>
+      <ul style="list-style:none;font-size:.95rem;line-height:1.9;color:rgba(255,255,255,.82)">
+        <li style="border-bottom:1px solid rgba(255,255,255,.08);padding:.3rem 0">Training data biased toward white, male, high-SES patients</li>
+        <li style="border-bottom:1px solid rgba(255,255,255,.08);padding:.3rem 0">ASD "female phenotype" systematically underrepresented — later diagnosis, different presentation</li>
+        <li style="border-bottom:1px solid rgba(255,255,255,.08);padding:.3rem 0">Indigenous and racialized youth underrepresented in most datasets</li>
+        <li style="border-bottom:1px solid rgba(255,255,255,.08);padding:.3rem 0">Socioeconomic confounders (access to care → diagnosis rates)</li>
+        <li style="padding:.3rem 0">Historical inequities encoded in training labels</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.8rem">✅ Responsible AI Checklist</div>
+      <ul class="checklist" style="font-size:.95rem;line-height:1.7;color:rgba(255,255,255,.82)">
+        <li>Who is in your training data? Are all groups represented?</li>
+        <li>Does model performance differ by race, sex, or SES?</li>
+        <li>Have community members been involved in design?</li>
+        <li>Is there a post-deployment audit mechanism?</li>
+        <li>Is a human always in the loop for clinical decisions?</li>
+      </ul>
+      <div style="margin-top:1rem;font-size:.8rem;background:rgba(209,166,173,.12);border:1px solid var(--warning);border-radius:6px;padding:.7rem 1rem;color:rgba(255,255,255,.75)">
+        📄 Ref: Obermeyer et al. (2019). Dissecting racial bias in an algorithm used to manage the health of populations. <em>Science</em>, 366(6464), 447–453.
+      </div>
+    </div>
+  </div>
+  <div class="notes">This often generates strong reactions — be prepared for extended discussion. The Obermeyer paper: "A widely deployed clinical algorithm systematically underestimated the health needs of Black patients because it used healthcare cost as a proxy for health need — encoding historical disparities in access to care." Similar risks exist in every mental health dataset built on diagnosed cases.</div>
+</div>
+
+<!-- SLIDE 22: Notebook 2 Callout -->
+<div class="slide callout" id="slide-22" data-section="3">
+  <div style="width:100%;max-width:800px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:2rem;margin-bottom:.5rem">🔍</div>
+      <h1 class="slide-title" style="font-size:2.8rem;text-align:center">Let's Explain Our Model!</h1>
+      <div style="color:rgba(255,255,255,.6);font-size:1rem">Using SHAP to audit what the model has learned</div>
+    </div>
+    <div class="terminal">
+      <div class="prompt">→ <strong style="color:#fff">Notebook 2: Explainability &amp; SHAP</strong></div>
+      <div style="margin-top:.4rem;color:#8B949E">Open in Google Colab:</div>
+      <div style="color:#F0E68C;margin:.2rem 0">[COLAB_URL_02]</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;font-size:1.05rem">
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">1</span> Open Notebook 2 in a new Colab tab</div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">2</span> It automatically retrains the model from Notebook 1</div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">3</span> Generate SHAP explanations — pause at <code style="background:rgba(255,255,255,.1);padding:.1rem .4rem;border-radius:3px"># EXERCISE</code> cells</div>
+    </div>
+    <div style="margin-top:1.2rem;background:rgba(255,255,255,.08);border-radius:8px;padding:.8rem 1.2rem;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:rgba(255,255,255,.75);font-size:.95rem">Key challenge: find a patient where the model is wrong — what features misled it?</span>
+      <span style="background:var(--magenta);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.9rem;font-weight:600;flex-shrink:0;margin-left:1rem">⏱️ 8 min</span>
+    </div>
+  </div>
+  <div class="notes">Quick demo of the beeswarm plot if time permits. The most powerful exercise is finding an incorrect prediction and using SHAP to understand why — this mirrors real-world model auditing that would be required before any clinical deployment.</div>
+</div>
+
+<!-- SLIDE 23: Privacy Section Header -->
+<div class="slide" id="slide-23" data-section="4">
+  <div style="text-align:center;width:100%">
+    <div class="section-label" style="text-align:center;font-size:1rem;margin-bottom:.8rem">Section 4</div>
+    <h1 class="slide-title" style="font-size:2.8rem;text-align:center;margin-bottom:1.5rem">Privacy-Preserving AI<br>&amp; Large Language Models</h1>
+    <div style="height:3px;width:80px;background:var(--magenta);margin:0 auto 2rem"></div>
+    <div style="display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
+      <div style="text-align:center"><div style="font-size:1.8rem">🔐</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Why Privacy Matters</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">🦙</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Local LLMs with Ollama</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">🏥</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Clinical Use Cases</div></div>
+    </div>
+  </div>
+  <div class="notes">"For many of you, this is the most immediately practical section. You have data. You have clinical questions LLMs could help with. But you can't send patient data to OpenAI. What do you do?" This section answers that question directly.</div>
+</div>
+
+<!-- SLIDE 24: Why Privacy Matters -->
+<div class="slide light" id="slide-24" data-section="4">
+  <div class="section-label">Section 4 — Privacy-Preserving AI</div>
+  <h1 class="slide-title">The Privacy Challenge</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:stretch">
+    <div style="background:rgba(220,38,38,.06);border:2px solid #EF4444;border-radius:10px;padding:1.3rem">
+      <div style="font-size:1.3rem;margin-bottom:.5rem">☁️ <strong style="color:#EF4444">Cloud LLM APIs</strong></div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65);margin-bottom:.5rem">ChatGPT, Claude API, Gemini API…</div>
+      <ul style="list-style:none;font-size:.9rem;line-height:1.8;color:rgba(10,22,40,.75)">
+        <li>✗ Data travels to external servers</li>
+        <li>✗ Subject to third-party data retention policies</li>
+        <li>✗ May be used for model training</li>
+        <li>✗ Processed outside your institution's perimeter</li>
+        <li style="font-weight:700;color:#EF4444;margin-top:.5rem">✗ Violates PIPEDA, PHIPA, HIPAA for identifiable patient data</li>
+      </ul>
+    </div>
+    <div style="background:rgba(5,150,105,.06);border:2px solid #059669;border-radius:10px;padding:1.3rem">
+      <div style="font-size:1.3rem;margin-bottom:.5rem">🖥️ <strong style="color:#059669">Local LLM via Ollama</strong></div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65);margin-bottom:.5rem">Llama 3, Gemma 3, Mistral on your machine…</div>
+      <ul style="list-style:none;font-size:.9rem;line-height:1.8;color:rgba(10,22,40,.75)">
+        <li>✓ Data never leaves your device</li>
+        <li>✓ No internet required after download</li>
+        <li>✓ No API key, no usage fees</li>
+        <li>✓ Compliant with institutional data governance</li>
+        <li style="font-weight:700;color:#059669;margin-top:.5rem">✓ Safe for real patient data (verify your institutional policy)</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-size:.9rem;color:rgba(10,22,40,.6);text-align:center">📋 PIPEDA (Canada) &nbsp;|&nbsp; PHIPA (Ontario) &nbsp;|&nbsp; HIPAA (USA) — all restrict transmission of health data to third parties</div>
+  <div class="notes">"This is the slide to screenshot. If someone in your department is using ChatGPT with patient information, they are likely violating institutional policy and provincial law — not through malice, but through unfamiliarity with what happens to that data." The local model approach is not experimental — it's accessible today on a standard research laptop.</div>
+</div>
+
+<!-- SLIDE 25: Ollama -->
+<div class="slide" id="slide-25" data-section="4">
+  <div class="section-label">Section 4 — Privacy-Preserving AI</div>
+  <h1 class="slide-title">Ollama: Local LLMs Made Easy</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:start">
+    <div>
+      <div style="font-size:.95rem;color:rgba(255,255,255,.8);margin-bottom:1rem">"Ollama is a tool that downloads and runs open-weight LLMs on your laptop. Think of it as <strong>Docker for AI models</strong>."</div>
+      <div class="card" style="margin-bottom:.6rem;font-size:.9rem;border-left:3px solid var(--magenta)">
+        <strong>Llama 3.2</strong> (Meta) — 3B params, ~2 GB, any modern laptop
+      </div>
+      <div class="card" style="margin-bottom:.6rem;font-size:.9rem;border-left:3px solid var(--magenta)">
+        <strong>Gemma 3:4b</strong> (Google) — 4B params, ~3 GB, high accuracy
+      </div>
+      <div class="card" style="margin-bottom:1rem;font-size:.9rem;border-left:3px solid var(--magenta)">
+        <strong>Mistral 7B</strong> (Mistral AI) — 7B params, ~4 GB, best quality
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.95rem">
+        <div>✓ No internet required after download</div>
+        <div>✓ No API key needed</div>
+        <div>✓ Runs on 8 GB RAM laptop</div>
+        <div>✓ Data stays on your machine</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.5);margin-bottom:.4rem">Terminal</div>
+      <div class="terminal">
+        <div><span class="prompt">$</span> ollama pull llama3.2</div>
+        <div style="color:#8B949E">pulling manifest... ✓</div>
+        <div>████████████████ 2.1 GB</div>
+        <div style="margin-top:.4rem"><span class="prompt">$</span> ollama run llama3.2</div>
+        <div style="color:#8B949E">&gt;&gt;&gt; Summarize this clinical note:</div>
+        <div style="color:#58D68D;margin-top:.2rem">Patient presents with moderate depression...</div>
+        <div style="color:#8B949E">[running locally — no data sent anywhere]</div>
+      </div>
+      <div style="margin-top:.8rem;background:rgba(5,150,105,.12);border:1px solid #059669;border-radius:8px;padding:.8rem 1rem;font-size:.9rem">
+        🔒 This entire interaction happened on your machine.<br>Zero network traffic. Zero external data exposure.
+      </div>
+    </div>
+  </div>
+  <div class="notes">If you have Ollama running live, switch to a terminal for a demo. Watching a clinically relevant task run locally — with no internet connection — is often the "aha" moment of the workshop. "This model is running entirely on my laptop. No network traffic. No API key. No data leaves this room."</div>
+</div>
+
+<!-- SLIDE 26: LLM Use Cases -->
+<div class="slide light" id="slide-26" data-section="4">
+  <div class="section-label">Section 4 — Privacy-Preserving AI</div>
+  <h1 class="slide-title">What Can Local LLMs Do for You?</h1>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.8rem">
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">📝</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem">Clinical Note Summarization</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.72)">Condense 3-page discharge summaries into structured bullet points covering key symptoms, risk factors, and follow-up priorities.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🔍</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem">Structured Information Extraction</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.72)">Extract PHQ-9 scores, diagnoses, medications, and risk levels from unstructured clinical notes into analysis-ready tables.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🔒</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem">De-identification</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.72)">Replace names, dates, locations with placeholder tokens [NAME], [DATE] before sharing data across sites.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">📚</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem">Survey Response Coding</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.72)">Code open-ended qualitative survey responses into thematic categories at scale — in minutes instead of weeks.</div>
+    </div>
+  </div>
+  <div class="warning-box">⚠️ LLMs make mistakes. Always validate outputs — especially for de-identification and clinical coding. Use validated tools (e.g., Microsoft Presidio) for production de-identification pipelines.</div>
+  <div class="notes">"Pick the use case most relevant to your work. For many researchers in this room, that's probably de-identification or structured extraction — the bottlenecks in your current research workflow." Notebook 3 demonstrates the first three tasks with 20 synthetic clinical vignettes.</div>
+</div>
+
+<!-- SLIDE 27: Federated Learning -->
+<div class="slide" id="slide-27" data-section="4">
+  <div class="section-label">Section 4 — Privacy-Preserving AI</div>
+  <h1 class="slide-title">Federated Learning: Train Without Sharing Data</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:start">
+    <div>
+      <div class="fed-wrap">         Central Server
+         (coordinates only)
+              │
+     ┌────────┴────────┐
+     ▼                 ▼
+Hospital A        Hospital B
+Local data        Local data
+Local training    Local training
+     │                 │
+ weights only     weights only
+     └────────┬────────┘
+              ▼
+       Updated global model
+
+No patient data ever leaves
+each hospital's perimeter.</div>
+      <div style="margin-top:.8rem;font-size:.9rem;color:rgba(255,255,255,.7)">Only model <strong>parameters</strong> are shared — not patient records.</div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.8rem">Real-World Frameworks</div>
+      <div class="card" style="margin-bottom:.5rem;font-size:.9rem">🔷 <strong>NVIDIA FLARE</strong> — production-grade, used across academic medical centers</div>
+      <div class="card" style="margin-bottom:.5rem;font-size:.9rem">🔶 <strong>PySyft</strong> (OpenMined) — differential privacy integration</div>
+      <div class="card" style="margin-bottom:1rem;font-size:.9rem">🔹 <strong>FLOWER</strong> — flexible, Python-native framework</div>
+      <div style="font-weight:700;color:var(--magenta);font-size:1rem;margin-bottom:.6rem">Why It Matters for Youth Mental Health</div>
+      <div style="font-size:.9rem;color:rgba(255,255,255,.8)">Rare presentations require multi-site data. Federated learning enables collaboration across CHEO, SickKids, BC Children's, Montreal Children's — without centralizing records.</div>
+      <div class="warning-box" style="margin-top:.7rem;font-size:.85rem">⚠️ Not plug-and-play — requires infrastructure. Model gradients can still leak information (gradient inversion attacks).</div>
+    </div>
+  </div>
+  <div class="notes">Conceptual only — "You don't need to implement this today. But know it exists when you're designing multi-site studies." Federated learning is increasingly practical with frameworks like NVIDIA FLARE. The key insight: you can collaborate across institutions without ever centralizing a patient record.</div>
+</div>
+
+<!-- SLIDE 28: Notebook 3 Callout -->
+<div class="slide callout" id="slide-28" data-section="4">
+  <div style="width:100%;max-width:800px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:2rem;margin-bottom:.5rem">🔐</div>
+      <h1 class="slide-title" style="font-size:2.8rem;text-align:center">Privacy-Preserving LLMs in Action!</h1>
+      <div style="color:rgba(255,255,255,.6);font-size:1rem">End-to-end: clinical text → LLM → structured features → ML model</div>
+    </div>
+    <div class="terminal">
+      <div class="prompt">→ <strong style="color:#fff">Notebook 3: Privacy-Preserving AI with Local LLMs</strong></div>
+      <div style="margin-top:.4rem;color:#8B949E">Open in Google Colab:</div>
+      <div style="color:#F0E68C;margin:.2rem 0">[COLAB_URL_03]</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;font-size:1.05rem">
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">1</span> Open Notebook 3 — set <code style="background:rgba(255,255,255,.1);padding:.1rem .4rem;border-radius:3px">USE_OLLAMA = False</code> for cloud mode</div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">2</span> Work through 3 LLM tasks: <strong>Summarize → Extract → De-identify</strong></div>
+      <div style="display:flex;gap:.8rem;align-items:center"><span style="color:var(--magenta);font-weight:700;font-size:1.3rem">3</span> Build the end-to-end pipeline: clinical text → LLM features → ML classifier</div>
+    </div>
+    <div style="margin-top:1.2rem;background:rgba(255,255,255,.08);border-radius:8px;padding:.8rem 1.2rem;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:rgba(255,255,255,.75);font-size:.95rem">Using synthetic clinical vignettes only — safe for any machine</span>
+      <span style="background:var(--magenta);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.9rem;font-weight:600;flex-shrink:0;margin-left:1rem">⏱️ 10 min</span>
+    </div>
+  </div>
+  <div class="notes">This is the capstone — connecting LLMs for text processing to the ML pipeline from Notebook 1. Open Notebook 3 live, run the vignette generation cell to show the synthetic dataset. "This is the full clinical AI workflow in miniature: unstructured EHR text → LLM → structured features → ML classifier."</div>
+</div>
+
+<!-- SLIDE 29: Clinical Integration Header -->
+<div class="slide" id="slide-29" data-section="5">
+  <div style="text-align:center;width:100%">
+    <div class="section-label" style="text-align:center;font-size:1rem;margin-bottom:.8rem">Section 5</div>
+    <h1 class="slide-title" style="font-size:2.8rem;text-align:center;margin-bottom:1.5rem">Integrating AI into<br>Clinical &amp; Research Practice</h1>
+    <div style="height:3px;width:80px;background:var(--magenta);margin:0 auto 2rem"></div>
+    <div style="display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
+      <div style="text-align:center"><div style="font-size:1.8rem">🏥</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">The Implementation Gap</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">🗺️</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Your Roadmap</div></div>
+      <div style="text-align:center"><div style="font-size:1.8rem">🔭</div><div style="font-size:.9rem;color:rgba(255,255,255,.7);margin-top:.3rem">Future Directions</div></div>
+    </div>
+  </div>
+  <div class="notes">"We've built the models. Now the hard part: getting them to patients." The implementation gap between research models and clinical tools is the defining challenge of the field right now. This section bridges from technical capability to institutional reality.</div>
+</div>
+
+<!-- SLIDE 30: Implementation Gap -->
+<div class="slide light" id="slide-30" data-section="5">
+  <div class="section-label">Section 5 — Clinical Integration</div>
+  <h1 class="slide-title">The Valley of Death: From Research to Clinic</h1>
+  <div style="display:flex;align-items:center;gap:.5rem;margin:1rem 0;font-size:1rem;flex-wrap:wrap">
+    <div style="background:rgba(185,54,128,.12);border:2px solid var(--magenta);border-radius:8px;padding:.6rem 1rem;font-weight:700">📊 Research Model</div>
+    <div style="font-size:1.5rem;color:rgba(10,22,40,.3)">→</div>
+    <div style="background:#FEF2F2;border:2px dashed #EF4444;border-radius:8px;padding:.6rem 1.2rem;font-weight:700;color:#EF4444;flex:1;text-align:center">⚠️ VALLEY OF DEATH ⚠️<div style="font-size:.75rem;font-weight:400;margin-top:.2rem;color:rgba(10,22,40,.5)">&lt;1% of published models reach clinical use</div></div>
+    <div style="font-size:1.5rem;color:rgba(10,22,40,.3)">→</div>
+    <div style="background:rgba(5,150,105,.1);border:2px solid #059669;border-radius:8px;padding:.6rem 1rem;font-weight:700;color:#059669">🏥 Clinical Tool</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem">
+    <div class="card" style="border-left:4px solid #EF4444">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem">🏛️ Regulatory</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.7)">Health Canada AI/ML guidance · FDA 510(k) clearance · IRB approval for prospective validation · SaMD classification</div>
+    </div>
+    <div class="card" style="border-left:4px solid #D97706">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem">⚙️ Workflow Integration</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.7)">EHR integration · Clinician UI design · Alert fatigue · Interoperability standards (FHIR)</div>
+    </div>
+    <div class="card" style="border-left:4px solid #7C3AED">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem">🤝 Clinician Trust</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.7)">Explainability requirements · Prospective evidence base · Liability questions · Change management</div>
+    </div>
+    <div class="card" style="border-left:4px solid #2563EB">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem">🔧 Ongoing Maintenance</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.7)">Model drift monitoring · Dataset shift · Retraining governance · Version control for clinical tools</div>
+    </div>
+  </div>
+  <div class="notes">"Publish the model — then spend 3–5 years getting it into clinical use. Plan for this from the start of your study." The four barrier categories are all real and all significant. None of them is primarily a technical problem — they're regulatory, organizational, and human factors challenges.</div>
+</div>
+
+<!-- SLIDE 31: Your Roadmap -->
+<div class="slide" id="slide-31" data-section="5">
+  <div class="section-label">Section 5 — Clinical Integration</div>
+  <h1 class="slide-title">5 Things You Can Do in the Next 6 Months</h1>
+  <div style="display:flex;flex-direction:column;gap:.65rem;margin-top:.8rem;max-width:880px">
+    <div style="display:flex;gap:1.2rem;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--magenta);font-weight:700;line-height:1;flex-shrink:0;min-width:2rem;text-align:center">01</div>
+      <div><div style="font-weight:700;font-size:1rem;margin-bottom:.2rem">🎯 Identify a clinical question</div><div style="font-size:.9rem;color:rgba(255,255,255,.75)">One specific, measurable question with outcome data. Not "predict mental health" — but "predict 90-day readmission after adolescent psychiatric inpatient stay."</div></div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--magenta);font-weight:700;line-height:1;flex-shrink:0;min-width:2rem;text-align:center">02</div>
+      <div><div style="font-weight:700;font-size:1rem;margin-bottom:.2rem">📊 Audit your existing data</div><div style="font-size:.9rem;color:rgba(255,255,255,.75)">What do you already collect? EHR fields, standardized assessments, administrative data? Talk to your data team about extraction feasibility.</div></div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--magenta);font-weight:700;line-height:1;flex-shrink:0;min-width:2rem;text-align:center">03</div>
+      <div><div style="font-weight:700;font-size:1rem;margin-bottom:.2rem">🤝 Find a computational collaborator</div><div style="font-size:.9rem;color:rgba(255,255,255,.75)">Your hospital's data science team, a university ML lab, or a bioinformatics core. You bring the clinical question; they bring the methods.</div></div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--magenta);font-weight:700;line-height:1;flex-shrink:0;min-width:2rem;text-align:center">04</div>
+      <div><div style="font-weight:700;font-size:1rem;margin-bottom:.2rem">🌐 Join an AI in health learning community</div><div style="font-size:.9rem;color:rgba(255,255,255,.75)">fast.ai · MLHC conference · CIFAR Pan-Canadian AI Strategy · Your institution's digital health working group</div></div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--magenta);font-weight:700;line-height:1;flex-shrink:0;min-width:2rem;text-align:center">05</div>
+      <div><div style="font-weight:700;font-size:1rem;margin-bottom:.2rem">💻 Run these notebooks with your own data</div><div style="font-size:.9rem;color:rgba(255,255,255,.75)">Replace the synthetic ABIDE data with your dataset — the preprocessing pipeline, models, and SHAP analysis all transfer directly.</div></div>
+    </div>
+  </div>
+  <div class="notes">"These five steps are concrete and actionable. Write down which one is your immediate next step." The most common barrier to clinical AI research is not technical — it's knowing which question to ask and having the right collaborations. Your clinical expertise is the most valuable part of the team.</div>
+</div>
+
+<!-- SLIDE 32: Emerging Frontiers -->
+<div class="slide light" id="slide-32" data-section="5">
+  <div class="section-label">Section 5 — Clinical Integration</div>
+  <h1 class="slide-title">What's Coming Next</h1>
+  <div class="grid-2" style="margin-top:.8rem">
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🔬</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Multimodal AI</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.75)">Combining brain imaging + EHR + genomics + wearables. The ABIDE dataset already represents this approach. Challenge: data integration across modalities at clinical scale.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">📖</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Foundation Models for EHR</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.75)">Models like NYUTron (trained on 7M clinical notes) can be fine-tuned for specific clinical tasks with minimal labeled data — dramatically reducing annotation burden.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--magenta)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🖥️</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">AI-Augmented Screening</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.75)">Tablet-based ASD screening tools using computer vision to analyze child behavior during structured tasks. Already in clinical trials at several centers.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--warning)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">💬</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem">Conversational AI for Mental Health</div>
+      <div style="font-size:.88rem;color:rgba(10,22,40,.75)">Chatbot-based CBT (Woebot, Wysa). Growing evidence base. Requires: safety monitoring, crisis escalation protocols, therapeutic alliance considerations.</div>
+      <div style="font-size:.8rem;color:#EF4444;margin-top:.4rem;font-weight:600">⚠️ Not a replacement for clinical care</div>
+    </div>
+  </div>
+  <div class="notes">"Where I'd place my research bets for the next 5 years." Multimodal AI is particularly relevant for perinatal mental health — the range of data collected during pregnancy and early childhood is extraordinary. Foundation models for EHR are potentially transformative for reducing annotation costs in clinical NLP research.</div>
+</div>
+
+<!-- SLIDE 33: Ethical Framework -->
+<div class="slide" id="slide-33" data-section="5">
+  <div class="section-label">Section 5 — Clinical Integration</div>
+  <h1 class="slide-title">A Framework for Responsible Clinical AI</h1>
+  <div class="grid-5" style="margin-top:1rem">
+    <div class="pillar">
+      <span class="p-icon">🔍</span>
+      <div class="p-title">Transparency</div>
+      <div class="p-desc">Can you explain how the model works? Would you be comfortable explaining its decision to a patient?</div>
+    </div>
+    <div class="pillar">
+      <span class="p-icon">⚖️</span>
+      <div class="p-title">Fairness</div>
+      <div class="p-desc">Does the model perform equally across demographic groups? Who was excluded from training data?</div>
+    </div>
+    <div class="pillar">
+      <span class="p-icon">🔐</span>
+      <div class="p-title">Privacy</div>
+      <div class="p-desc">Is patient data protected? Are you compliant with PIPEDA/PHIPA? Is your data governance documented?</div>
+    </div>
+    <div class="pillar">
+      <span class="p-icon">✅</span>
+      <div class="p-title">Clinical Validity</div>
+      <div class="p-desc">Has the model been prospectively validated in your clinical population — not just the research dataset?</div>
+    </div>
+    <div class="pillar">
+      <span class="p-icon">👤</span>
+      <div class="p-title">Accountability</div>
+      <div class="p-desc">Who is responsible when the model is wrong? Is there always a human in the loop for clinical decisions?</div>
+    </div>
+  </div>
+  <div style="margin-top:1.2rem;text-align:center;background:rgba(185,54,128,.15);border:2px solid var(--magenta);border-radius:10px;padding:.8rem 1.5rem;font-size:1.05rem;font-weight:600;color:var(--magenta)">
+    The Human-in-the-Loop requirement is non-negotiable for clinical decision support.
+  </div>
+  <div style="margin-top:.6rem;text-align:center;font-size:.8rem;color:rgba(255,255,255,.45)">Ref: Montreal Declaration for Responsible AI Development (2018)</div>
+  <div class="notes">"Print this slide. Put it in your grant applications and ethics submissions. Funding agencies are increasingly requiring this kind of framework explicitly. The five pillars map directly to what REBs and health technology assessment bodies are asking for." The human-in-the-loop point is non-negotiable — it's both an ethical requirement and a regulatory expectation.</div>
+</div>
+
+<!-- SLIDE 34: Key Takeaways -->
+<div class="slide" id="slide-34" data-section="6">
+  <div class="section-label">Section 6 — Wrap-Up</div>
+  <h1 class="slide-title">What We Covered Today</h1>
+  <div style="display:flex;flex-direction:column;gap:.7rem;margin-top:.8rem;max-width:860px">
+    <div style="display:flex;gap:1.2rem;align-items:center;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem;border-left:4px solid var(--magenta)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--magenta);font-weight:700;flex-shrink:0;min-width:1.8rem">01</div>
+      <div style="font-size:1.02rem">Machine learning <strong>finds patterns in data</strong> — supervised learning is the most common approach in clinical AI.</div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:center;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem;border-left:4px solid var(--magenta)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--magenta);font-weight:700;flex-shrink:0;min-width:1.8rem">02</div>
+      <div style="font-size:1.02rem">Model evaluation requires <strong>more than accuracy</strong> — always report AUC, F1, and performance stratified across demographic subgroups.</div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:center;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem;border-left:4px solid var(--magenta)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--magenta);font-weight:700;flex-shrink:0;min-width:1.8rem">03</div>
+      <div style="font-size:1.02rem"><strong>SHAP makes black-box models explainable</strong> — enabling clinical audit, patient communication, and regulatory compliance.</div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:center;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem;border-left:4px solid var(--magenta)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--magenta);font-weight:700;flex-shrink:0;min-width:1.8rem">04</div>
+      <div style="font-size:1.02rem"><strong>Local LLMs (Ollama)</strong> enable powerful NLP workflows without sending patient data to the cloud — the approach required for real clinical data.</div>
+    </div>
+    <div style="display:flex;gap:1.2rem;align-items:center;background:rgba(255,255,255,.06);border-radius:8px;padding:.8rem 1.2rem;border-left:4px solid var(--magenta)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--magenta);font-weight:700;flex-shrink:0;min-width:1.8rem">05</div>
+      <div style="font-size:1.02rem"><strong>Clinical integration</strong> requires regulatory, workflow, and trust-building work — start planning for deployment in the research design phase.</div>
+    </div>
+  </div>
+  <div class="notes">Pause on each bullet and invite reflection. "Which one surprised you most?" This is a good moment to ask 2–3 attendees to share one thing they'll try in the next week or month. The most common responses: trying the notebooks on their own data, and reaching out to find a computational collaborator.</div>
+</div>
+
+<!-- SLIDE 35: Resources -->
+<div class="slide light" id="slide-35" data-section="6">
+  <div class="section-label">Section 6 — Wrap-Up</div>
+  <h1 class="slide-title">Keep Learning: Curated Resources</h1>
+  <div class="grid-3" style="margin-top:.8rem;align-items:start">
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:.95rem;margin-bottom:.6rem">📚 LEARN</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">fast.ai — free practical ML course</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">Hugging Face NLP Course</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">Coursera ML Specialization</div>
+      <div class="card" style="font-size:.85rem;padding:.6rem .9rem">Papers With Code</div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:.95rem;margin-bottom:.6rem">📊 OPEN DATASETS</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">ABIDE I &amp; II — ASD neuroimaging</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">DAIC-WOZ — depression interviews</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.85rem;padding:.6rem .9rem">CLEF eRisk — early risk, social media</div>
+      <div class="card" style="font-size:.85rem;padding:.6rem .9rem">PhysioNet MIMIC-III/IV — EHR</div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--magenta);font-size:.95rem;margin-bottom:.6rem">📄 KEY PAPERS</div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.82rem;padding:.6rem .9rem">Shatte et al. (2019) ML in mental health — <em>Psych Medicine</em></div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.82rem;padding:.6rem .9rem">Rajpurkar et al. (2022) AI in health — <em>Nature Medicine</em></div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.82rem;padding:.6rem .9rem">Obermeyer et al. (2019) Racial bias — <em>Science</em></div>
+      <div class="card" style="margin-bottom:.4rem;font-size:.82rem;padding:.6rem .9rem;border:1px dashed var(--magenta)">[YOUR CITATION HERE] — ASD prediction</div>
+      <div class="card" style="font-size:.82rem;padding:.6rem .9rem;border:1px dashed var(--magenta)">[YOUR CITATION HERE] — Anomaly detection</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;text-align:center;font-size:.9rem;color:rgba(10,22,40,.6)">All resources and links available in the GitHub repository → <strong>[GITHUB_REPO_URL]</strong></div>
+  <div class="notes">"All of these are free. The fast.ai course is exceptional for researchers with statistical backgrounds but no programming experience. Hugging Face has become the GitHub of AI models. All links are in the README of the workshop GitHub repo."</div>
+</div>
+
+<!-- SLIDE 36: Thank You -->
+<div class="slide" id="slide-36" data-section="6">
+  <div style="width:100%;text-align:center">
+    <h1 class="slide-title" style="font-size:3.5rem;margin-bottom:.5rem">Thank You</h1>
+    <div style="height:3px;width:80px;background:var(--magenta);margin:.8rem auto 1.5rem"></div>
+    <div style="font-size:1.4rem;color:rgba(255,255,255,.75);margin-bottom:2rem">Questions &amp; Discussion</div>
+    <div style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-bottom:2rem">
+      <div style="background:rgba(255,255,255,.07);border-radius:10px;padding:1.2rem 2rem;min-width:220px">
+        <div style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.08em">Presenter</div>
+        <div style="font-weight:700;font-size:1.1rem">[PRESENTER NAME]</div>
+        <div style="color:var(--magenta);font-size:.9rem;margin-top:.2rem">[EMAIL]</div>
+      </div>
+      <div style="background:rgba(255,255,255,.07);border-radius:10px;padding:1.2rem 2rem;min-width:220px">
+        <div style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.08em">Presenter</div>
+        <div style="font-weight:700;font-size:1.1rem">[PRESENTER NAME]</div>
+        <div style="color:var(--magenta);font-size:.9rem;margin-top:.2rem">[EMAIL]</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:3rem;align-items:center;flex-wrap:wrap">
+      <div>
+        <div class="qr-box" style="width:180px;height:180px;margin:0 auto">
+          📁 GitHub Repo<br>Workshop Materials<br>[GITHUB_REPO_URL]
+        </div>
+      </div>
+      <div style="text-align:left;max-width:320px">
+        <div style="font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:.6rem">Acknowledgments</div>
+        <div style="font-size:.9rem;color:rgba(255,255,255,.7)">[FUNDING SOURCE]<br>[INSTITUTION]<br>[COLLABORATORS]</div>
+        <div style="margin-top:1rem;font-size:.85rem;color:rgba(255,255,255,.45)">#AIforMentalHealth</div>
+        <div style="margin-top:.3rem;font-size:.8rem;color:rgba(255,255,255,.3)">Materials released under MIT License</div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">Thank the audience warmly. Mention the GitHub repository URL for updated materials. Invite follow-up questions via email. "If you adapt these notebooks for your own data, we'd love to hear what you build." Leave at least 5 minutes for questions — reference the facilitator guide's Q&A section for prepared responses.</div>
+</div>
+
+<!-- ═══ UI CHROME ═══ -->
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 36</div>
+
+<div id="sidebar">
+  <h3>Slides</h3>
+  <div class="nav-section">Section 0 — Logistics</div>
+  <div class="nav-item" onclick="showSlide(0)">1. Title</div>
+  <div class="nav-item" onclick="showSlide(1)">2. Housekeeping</div>
+  <div class="nav-item" onclick="showSlide(2)">3. Presenters</div>
+  <div class="nav-item" onclick="showSlide(3)">4. Learning Objectives</div>
+  <div class="nav-section">Section 1 — AI Landscape</div>
+  <div class="nav-item" onclick="showSlide(4)">5. Why AI, Why Now?</div>
+  <div class="nav-item" onclick="showSlide(5)">6. AI Vocabulary</div>
+  <div class="nav-item" onclick="showSlide(6)">7. AI in Healthcare</div>
+  <div class="nav-item" onclick="showSlide(7)">8. Mental Health AI</div>
+  <div class="nav-item" onclick="showSlide(8)">9. The Current Moment: LLMs</div>
+  <div class="nav-section">Section 2 — ML Fundamentals</div>
+  <div class="nav-item" onclick="showSlide(9)">10. Section Header</div>
+  <div class="nav-item" onclick="showSlide(10)">11. The ML Paradigm</div>
+  <div class="nav-item" onclick="showSlide(11)">12. Types of ML</div>
+  <div class="nav-item" onclick="showSlide(12)">13. The ML Pipeline</div>
+  <div class="nav-item" onclick="showSlide(13)">14. Key Concepts</div>
+  <div class="nav-item" onclick="showSlide(14)">15. Evaluation Metrics</div>
+  <div class="nav-item" onclick="showSlide(15)">16. Notebook 1 →</div>
+  <div class="nav-section">Section 3 — Explainability</div>
+  <div class="nav-item" onclick="showSlide(16)">17. Section Header</div>
+  <div class="nav-item" onclick="showSlide(17)">18. The Black Box Problem</div>
+  <div class="nav-item" onclick="showSlide(18)">19. Explainability Methods</div>
+  <div class="nav-item" onclick="showSlide(19)">20. SHAP in Plain English</div>
+  <div class="nav-item" onclick="showSlide(20)">21. Bias &amp; Fairness</div>
+  <div class="nav-item" onclick="showSlide(21)">22. Notebook 2 →</div>
+  <div class="nav-section">Section 4 — Privacy &amp; LLMs</div>
+  <div class="nav-item" onclick="showSlide(22)">23. Section Header</div>
+  <div class="nav-item" onclick="showSlide(23)">24. Why Privacy Matters</div>
+  <div class="nav-item" onclick="showSlide(24)">25. What is Ollama?</div>
+  <div class="nav-item" onclick="showSlide(25)">26. LLM Use Cases</div>
+  <div class="nav-item" onclick="showSlide(26)">27. Federated Learning</div>
+  <div class="nav-item" onclick="showSlide(27)">28. Notebook 3 →</div>
+  <div class="nav-section">Section 5 — Clinical Integration</div>
+  <div class="nav-item" onclick="showSlide(28)">29. Section Header</div>
+  <div class="nav-item" onclick="showSlide(29)">30. Implementation Gap</div>
+  <div class="nav-item" onclick="showSlide(30)">31. Your Roadmap</div>
+  <div class="nav-item" onclick="showSlide(31)">32. Emerging Frontiers</div>
+  <div class="nav-item" onclick="showSlide(32)">33. Ethical Framework</div>
+  <div class="nav-section">Section 6 — Wrap-Up</div>
+  <div class="nav-item" onclick="showSlide(33)">34. Key Takeaways</div>
+  <div class="nav-item" onclick="showSlide(34)">35. Resources</div>
+  <div class="nav-item" onclick="showSlide(35)">36. Thank You / Q&amp;A</div>
+</div>
+
+<div id="help-overlay">
+  <div class="help-box">
+    <h2>Keyboard Shortcuts</h2>
+    <div class="shortcut-row"><span>Next slide</span><span><kbd>→</kbd> or <kbd>Space</kbd></span></div>
+    <div class="shortcut-row"><span>Previous slide</span><span><kbd>←</kbd></span></div>
+    <div class="shortcut-row"><span>Toggle speaker notes</span><span><kbd>S</kbd></span></div>
+    <div class="shortcut-row"><span>Toggle slide navigator</span><span><kbd>N</kbd></span></div>
+    <div class="shortcut-row"><span>Presenter mode</span><span><kbd>P</kbd></span></div>
+    <div class="shortcut-row"><span>This help</span><span><kbd>?</kbd></span></div>
+    <div class="shortcut-row"><span>Close</span><span><kbd>Escape</kbd></span></div>
+    <p style="margin-top:1rem;font-size:.85rem;color:rgba(255,255,255,.5)">Click anywhere on a slide to advance.</p>
+  </div>
+</div>
+
+<script>
+const TOTAL = 36;
+const SECTION_COLORS = {0:'#6B7280',1:'#B93680',2:'#2563EB',3:'#7C3AED',4:'#059669',5:'#D97706',6:'#B93680'};
+let cur = 0, pipeStep = 0;
+
+function showSlide(n) {
+  const prev = document.getElementById('slide-'+(cur+1));
+  if(prev){prev.classList.remove('active');}
+  cur = Math.max(0, Math.min(n, TOTAL-1));
+  pipeStep = 0;
+  const el = document.getElementById('slide-'+(cur+1));
+  el.classList.add('active');
+  updateChrome();
+  onSlideEnter(cur+1);
+}
+
+function updateChrome(){
+  const el = document.getElementById('slide-'+(cur+1));
+  const sec = el ? (el.dataset.section||'0') : '0';
+  const pct = ((cur+1)/TOTAL*100).toFixed(1);
+  document.getElementById('progress-bar').style.width = pct+'%';
+  document.getElementById('progress-bar').style.background = SECTION_COLORS[sec]||'#B93680';
+  document.getElementById('slide-counter').textContent = (cur+1)+' / '+TOTAL;
+  // sidebar active
+  document.querySelectorAll('.nav-item').forEach((item,i)=>{
+    item.classList.toggle('active', i===cur);
+  });
+  // counter color
+  const isDark = !el.classList.contains('light');
+  document.getElementById('slide-counter').style.color = isDark ? 'rgba(255,255,255,.4)' : 'rgba(10,22,40,.4)';
+}
+
+function onSlideEnter(n){
+  if(n===5){ startTimeline(); }
+  if(n===6){ startCircles(); }
+  if(n===4){ startObjectives(); }
+}
+
+function startTimeline(){
+  const fill = document.querySelector('.timeline-fill');
+  const dots = document.querySelectorAll('.t-dot');
+  if(!fill) return;
+  fill.style.width='0';
+  dots.forEach(d=>d.style.opacity=0);
+  setTimeout(()=>{fill.style.width='100%';},100);
+  dots.forEach((d,i)=>setTimeout(()=>{d.style.opacity=1;},300+i*250));
+}
+
+function startCircles(){
+  const circles = document.querySelectorAll('.circle');
+  circles.forEach(c=>c.style.transform='scale(0)');
+  circles.forEach((c,i)=>setTimeout(()=>{c.style.transform='scale(1)';},i*200+100));
+}
+
+function startObjectives(){
+  document.querySelectorAll('.obj-card').forEach((c,i)=>{
+    c.classList.remove('show');
+    setTimeout(()=>c.classList.add('show'), i*900+300);
+  });
+}
+
+function revealPipeStep(step){
+  document.querySelectorAll('.pipe-step').forEach((el,i)=>{
+    if(i<=step) el.classList.add('revealed');
+  });
+  const descs = [
+    'Collect raw clinical data: EHR records, assessment scores, imaging, notes.',
+    'Handle missing values, remove outliers, standardize formats.',
+    'Select and engineer predictive variables from raw data.',
+    'Fit the model to training data using an optimization algorithm.',
+    'Measure performance on held-out test data using AUC, F1, etc.',
+    'Integrate into clinical workflow with monitoring and governance.'
+  ];
+  const desc = document.querySelector('.pipe-desc');
+  if(desc && descs[step]) desc.textContent = descs[step];
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(e.key==='ArrowRight'||e.key===' '){
+    e.preventDefault();
+    if(cur===12 && pipeStep<5){ revealPipeStep(pipeStep); pipeStep++; }
+    else showSlide(cur+1);
+  }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); showSlide(cur-1); }
+  if(e.key.toLowerCase()==='s') document.body.classList.toggle('notes-on');
+  if(e.key.toLowerCase()==='n') document.getElementById('sidebar').classList.toggle('open');
+  if(e.key.toLowerCase()==='p') document.body.classList.toggle('presenter-mode');
+  if(e.key==='?') document.getElementById('help-overlay').classList.toggle('visible');
+  if(e.key==='Escape'){
+    document.getElementById('help-overlay').classList.remove('visible');
+    document.getElementById('sidebar').classList.remove('open');
+  }
+});
+
+// Init
+showSlide(0);
+</script>
+</body>
+</html>
