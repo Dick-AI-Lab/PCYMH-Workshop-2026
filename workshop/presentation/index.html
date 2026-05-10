@@ -117,6 +117,8 @@ body{font-family:'Source Sans 3',sans-serif;background:#000;overflow:hidden;heig
 .photo-placeholder{width:90px;height:90px;border-radius:50%;background:rgba(185,54,128,.2);
   border:2px dashed var(--magenta);margin:0 auto .8rem;display:flex;align-items:center;justify-content:center;
   font-size:1.5rem;color:var(--magenta)}
+.presenter-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--magenta);margin:0 auto .8rem;display:block}
 /* ── QR placeholder ── */
 .qr-box{width:150px;height:150px;border:3px dashed rgba(255,255,255,.4);border-radius:8px;
   display:flex;align-items:center;justify-content:center;text-align:center;
@@ -241,28 +243,66 @@ body.notes-on .notes{display:block}
   <h1 class="slide-title">About the Presenters</h1>
   <div class="card-row" style="margin-top:1rem">
     <div class="presenter-card card-col">
-      <div class="photo-placeholder">👤</div>
+      <img class="presenter-photo" src="../presenters/kdick.jpg" alt="Kevin Dick">
       <div style="font-weight:700;font-size:1.1rem">Kevin Dick</div>
-      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">AI Data Scientist, Investigator</div>
-      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">BORN Ontario, CHEO-RI</div>
-      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">AI Data Scientist &amp; Investigator</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">BORN Ontario · CHEO-RI</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.55);margin-top:.5rem;line-height:1.4">Principal Investigator of the Dick AI Lab, an embedded interdisciplinary research group advancing foundational AI and screening tools for maternal-fetal and population health.</div>
     </div>
     <div class="presenter-card card-col">
-      <div class="photo-placeholder">👤</div>
-      <div style="font-weight:700;font-size:1.1rem">Kevin Dick</div>
-      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">AI Data Scientist, Investigator</div>
-      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">BORN Ontario, CHEO-RI</div>
-      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+      <img class="presenter-photo" src="../presenters/akruglikov.png" alt="Alibek Kruglikov">
+      <div style="font-weight:700;font-size:1.1rem">Alibek Kruglikov</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">Postdoctoral Fellow</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">CHEO-RI</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.55);margin-top:.5rem;line-height:1.4">Focuses on advancing autism spectrum disorder (ASD) screening through the use of AI.</div>
     </div>
     <div class="presenter-card card-col">
-      <div class="photo-placeholder">👤</div>
-      <div style="font-weight:700;font-size:1.1rem">Kevin Dick</div>
-      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">AI Data Scientist, Investigator</div>
-      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">BORN Ontario, CHEO-RI</div>
-      <div style="font-size:.85rem;color:rgba(10,22,40,.5);margin-top:.5rem">[BIO — 1–2 sentences on research focus]</div>
+      <img class="presenter-photo" src="../presenters/ymegahed.jpeg" alt="Youssef Megahed">
+      <div style="font-weight:700;font-size:1.1rem">Youssef Megahed</div>
+      <div style="color:var(--magenta);font-size:.9rem;margin:.2rem 0">AI Analyst</div>
+      <div style="font-size:.9rem;color:rgba(10,22,40,.65)">BORN Ontario</div>
+      <div style="font-size:.85rem;color:rgba(10,22,40,.55);margin-top:.5rem;line-height:1.4">Expertise in developing AI pipelines and models for medical datasets and large-scale medical imaging.</div>
     </div>
   </div>
   <div class="notes">Keep introductions to 30–45 seconds each. Mention your clinical or research context — the clinical anchor establishes credibility with this audience. Briefly describe the research group and what motivated this workshop.</div>
+</div>
+
+<!-- SLIDE 3b: The Dick AI Lab -->
+<div class="slide light" id="slide-3b" data-section="0">
+  <div class="section-label">Our Research Group</div>
+  <h1 class="slide-title">The Dick AI Lab</h1>
+  <div class="grid-2" style="margin-top:.8rem;align-items:start;gap:2.5rem">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1rem">
+      <img src="../presenters/dick-ai-lab_logo_square-b.png" alt="Dick AI Lab logo" style="width:110px;height:auto">
+      <img src="../presenters/focus-areas_1-4.png" alt="Research focus areas" style="width:100%;border-radius:8px;border:1px solid rgba(10,22,40,.12)">
+    </div>
+    <div>
+      <div style="font-weight:600;font-size:.85rem;color:var(--magenta);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.08em">Selected Publications</div>
+      <div style="display:flex;flex-direction:column;gap:.55rem">
+        <div class="card" style="padding:.65rem 1rem">
+          <div style="font-weight:600;font-size:.9rem;color:var(--navy)">Transformer-Based Deep Learning Ensemble for ASD Prediction</div>
+          <div style="font-size:.82rem;color:rgba(10,22,40,.6);margin:.18rem 0">Dick et al. (2025) · <em>Scientific Reports</em></div>
+          <a href="https://www.nature.com/articles/s41598-025-90216-8" target="_blank" rel="noopener" style="color:var(--magenta);font-size:.8rem;text-decoration:none">nature.com/articles/s41598-025-90216-8 →</a>
+        </div>
+        <div class="card" style="padding:.65rem 1rem">
+          <div style="font-weight:600;font-size:.9rem;color:var(--navy)">Deep Learning for Prenatal Renal Anomaly Detection</div>
+          <div style="font-size:.82rem;color:rgba(10,22,40,.6);margin:.18rem 0">Miguel et al. (2024) · <em>Scientific Reports</em></div>
+          <a href="https://www.nature.com/articles/s41598-024-59248-4" target="_blank" rel="noopener" style="color:var(--magenta);font-size:.8rem;text-decoration:none">nature.com/articles/s41598-024-59248-4 →</a>
+        </div>
+        <div class="card" style="padding:.65rem 1rem">
+          <div style="font-weight:600;font-size:.9rem;color:var(--navy)">MetaCAM: Ensemble-Based Class Activation Mapping for Explainability</div>
+          <div style="font-size:.82rem;color:rgba(10,22,40,.6);margin:.18rem 0">Dick et al. (2026) · <em>Scientific Reports</em></div>
+          <a href="https://www.nature.com/articles/s41598-026-42879-0" target="_blank" rel="noopener" style="color:var(--magenta);font-size:.8rem;text-decoration:none">nature.com/articles/s41598-026-42879-0 →</a>
+        </div>
+        <div class="card" style="padding:.65rem 1rem">
+          <div style="font-weight:600;font-size:.9rem;color:var(--navy)">The Transformative Potential of AI in Obstetrics &amp; Gynaecology</div>
+          <div style="font-size:.82rem;color:rgba(10,22,40,.6);margin:.18rem 0">Dick et al. (2024) · <em>J Obstet Gynaecol Canada</em></div>
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S1701216323006400" target="_blank" rel="noopener" style="color:var(--magenta);font-size:.8rem;text-decoration:none">sciencedirect.com → S1701216323006400 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">This slide briefly grounds the workshop in real research. The Dick AI Lab is embedded within CHEO-RI and BORN Ontario, focused on perinatal AI, ASD screening, and clinical NLP. These four papers span ASD prediction, prenatal ultrasound, model explainability, and an Ob/Gyn AI overview — directly relevant to today's topics. Keep this to 60–90 seconds.</div>
 </div>
 
 <!-- SLIDE 4: Learning Objectives -->
@@ -1319,45 +1359,46 @@ each hospital's perimeter.</div>
   <div class="nav-item" onclick="showSlide(0)">1. Title</div>
   <div class="nav-item" onclick="showSlide(1)">2. Housekeeping</div>
   <div class="nav-item" onclick="showSlide(2)">3. Presenters</div>
-  <div class="nav-item" onclick="showSlide(3)">4. Learning Objectives</div>
+  <div class="nav-item" onclick="showSlide(3)">4. The Dick AI Lab</div>
+  <div class="nav-item" onclick="showSlide(4)">5. Learning Objectives</div>
   <div class="nav-section">Section 1 — AI Landscape</div>
-  <div class="nav-item" onclick="showSlide(4)">5. Why AI, Why Now?</div>
-  <div class="nav-item" onclick="showSlide(5)">6. AI Vocabulary</div>
-  <div class="nav-item" onclick="showSlide(6)">7. AI in Healthcare</div>
-  <div class="nav-item" onclick="showSlide(7)">8. Mental Health AI</div>
-  <div class="nav-item" onclick="showSlide(8)">9. The Current Moment: LLMs</div>
+  <div class="nav-item" onclick="showSlide(5)">6. Why AI, Why Now?</div>
+  <div class="nav-item" onclick="showSlide(6)">7. AI Vocabulary</div>
+  <div class="nav-item" onclick="showSlide(7)">8. AI in Healthcare</div>
+  <div class="nav-item" onclick="showSlide(8)">9. Mental Health AI</div>
+  <div class="nav-item" onclick="showSlide(9)">10. The Current Moment: LLMs</div>
   <div class="nav-section">Section 2 — ML Fundamentals</div>
-  <div class="nav-item" onclick="showSlide(9)">10. Section Header</div>
-  <div class="nav-item" onclick="showSlide(10)">11. The ML Paradigm</div>
-  <div class="nav-item" onclick="showSlide(11)">12. Types of ML</div>
-  <div class="nav-item" onclick="showSlide(12)">13. The ML Pipeline</div>
-  <div class="nav-item" onclick="showSlide(13)">14. Key Concepts</div>
-  <div class="nav-item" onclick="showSlide(14)">15. Evaluation Metrics</div>
-  <div class="nav-item" onclick="showSlide(15)">16. Notebook 1 →</div>
+  <div class="nav-item" onclick="showSlide(10)">11. Section Header</div>
+  <div class="nav-item" onclick="showSlide(11)">12. The ML Paradigm</div>
+  <div class="nav-item" onclick="showSlide(12)">13. Types of ML</div>
+  <div class="nav-item" onclick="showSlide(13)">14. The ML Pipeline</div>
+  <div class="nav-item" onclick="showSlide(14)">15. Key Concepts</div>
+  <div class="nav-item" onclick="showSlide(15)">16. Evaluation Metrics</div>
+  <div class="nav-item" onclick="showSlide(16)">17. Notebook 1 →</div>
   <div class="nav-section">Section 3 — Explainability</div>
-  <div class="nav-item" onclick="showSlide(16)">17. Section Header</div>
-  <div class="nav-item" onclick="showSlide(17)">18. The Black Box Problem</div>
-  <div class="nav-item" onclick="showSlide(18)">19. Explainability Methods</div>
-  <div class="nav-item" onclick="showSlide(19)">20. SHAP in Plain English</div>
-  <div class="nav-item" onclick="showSlide(20)">21. Bias &amp; Fairness</div>
-  <div class="nav-item" onclick="showSlide(21)">22. Notebook 2 →</div>
+  <div class="nav-item" onclick="showSlide(17)">18. Section Header</div>
+  <div class="nav-item" onclick="showSlide(18)">19. The Black Box Problem</div>
+  <div class="nav-item" onclick="showSlide(19)">20. Explainability Methods</div>
+  <div class="nav-item" onclick="showSlide(20)">21. SHAP in Plain English</div>
+  <div class="nav-item" onclick="showSlide(21)">22. Bias &amp; Fairness</div>
+  <div class="nav-item" onclick="showSlide(22)">23. Notebook 2 →</div>
   <div class="nav-section">Section 4 — Privacy &amp; LLMs</div>
-  <div class="nav-item" onclick="showSlide(22)">23. Section Header</div>
-  <div class="nav-item" onclick="showSlide(23)">24. Why Privacy Matters</div>
-  <div class="nav-item" onclick="showSlide(24)">25. What is Ollama?</div>
-  <div class="nav-item" onclick="showSlide(25)">26. LLM Use Cases</div>
-  <div class="nav-item" onclick="showSlide(26)">27. Federated Learning</div>
-  <div class="nav-item" onclick="showSlide(27)">28. Notebook 3 →</div>
+  <div class="nav-item" onclick="showSlide(23)">24. Section Header</div>
+  <div class="nav-item" onclick="showSlide(24)">25. Why Privacy Matters</div>
+  <div class="nav-item" onclick="showSlide(25)">26. What is Ollama?</div>
+  <div class="nav-item" onclick="showSlide(26)">27. LLM Use Cases</div>
+  <div class="nav-item" onclick="showSlide(27)">28. Federated Learning</div>
+  <div class="nav-item" onclick="showSlide(28)">29. Notebook 3 →</div>
   <div class="nav-section">Section 5 — Clinical Integration</div>
-  <div class="nav-item" onclick="showSlide(28)">29. Section Header</div>
-  <div class="nav-item" onclick="showSlide(29)">30. Implementation Gap</div>
-  <div class="nav-item" onclick="showSlide(30)">31. Your Roadmap</div>
-  <div class="nav-item" onclick="showSlide(31)">32. Emerging Frontiers</div>
-  <div class="nav-item" onclick="showSlide(32)">33. Ethical Framework</div>
+  <div class="nav-item" onclick="showSlide(29)">30. Section Header</div>
+  <div class="nav-item" onclick="showSlide(30)">31. Implementation Gap</div>
+  <div class="nav-item" onclick="showSlide(31)">32. Your Roadmap</div>
+  <div class="nav-item" onclick="showSlide(32)">33. Emerging Frontiers</div>
+  <div class="nav-item" onclick="showSlide(33)">34. Ethical Framework</div>
   <div class="nav-section">Section 6 — Wrap-Up</div>
-  <div class="nav-item" onclick="showSlide(33)">34. Key Takeaways</div>
-  <div class="nav-item" onclick="showSlide(34)">35. Resources</div>
-  <div class="nav-item" onclick="showSlide(35)">36. Thank You / Q&amp;A</div>
+  <div class="nav-item" onclick="showSlide(34)">35. Key Takeaways</div>
+  <div class="nav-item" onclick="showSlide(35)">36. Resources</div>
+  <div class="nav-item" onclick="showSlide(36)">37. Thank You / Q&amp;A</div>
 </div>
 
 <div id="help-overlay">
@@ -1375,41 +1416,38 @@ each hospital's perimeter.</div>
 </div>
 
 <script>
-const TOTAL = 36;
+const slides = Array.from(document.querySelectorAll('.slide'));
+const TOTAL = slides.length;
 const SECTION_COLORS = {0:'#6B7280',1:'#B93680',2:'#2563EB',3:'#7C3AED',4:'#059669',5:'#D97706',6:'#B93680'};
 let cur = 0, pipeStep = 0;
 
 function showSlide(n) {
-  const prev = document.getElementById('slide-'+(cur+1));
-  if(prev){prev.classList.remove('active');}
+  if(slides[cur]) slides[cur].classList.remove('active');
   cur = Math.max(0, Math.min(n, TOTAL-1));
   pipeStep = 0;
-  const el = document.getElementById('slide-'+(cur+1));
-  el.classList.add('active');
+  slides[cur].classList.add('active');
   updateChrome();
   onSlideEnter(cur+1);
 }
 
 function updateChrome(){
-  const el = document.getElementById('slide-'+(cur+1));
+  const el = slides[cur];
   const sec = el ? (el.dataset.section||'0') : '0';
   const pct = ((cur+1)/TOTAL*100).toFixed(1);
   document.getElementById('progress-bar').style.width = pct+'%';
   document.getElementById('progress-bar').style.background = SECTION_COLORS[sec]||'#B93680';
   document.getElementById('slide-counter').textContent = (cur+1)+' / '+TOTAL;
-  // sidebar active
   document.querySelectorAll('.nav-item').forEach((item,i)=>{
     item.classList.toggle('active', i===cur);
   });
-  // counter color
   const isDark = !el.classList.contains('light');
   document.getElementById('slide-counter').style.color = isDark ? 'rgba(255,255,255,.4)' : 'rgba(10,22,40,.4)';
 }
 
 function onSlideEnter(n){
-  if(n===5){ startTimeline(); }
-  if(n===6){ startCircles(); }
-  if(n===4){ startObjectives(); }
+  if(n===5){ startObjectives(); }
+  if(n===6){ startTimeline(); }
+  if(n===7){ startCircles(); }
 }
 
 function startTimeline(){
@@ -1455,7 +1493,7 @@ document.addEventListener('keydown', e=>{
   if(e.target.tagName==='INPUT') return;
   if(e.key==='ArrowRight'||e.key===' '){
     e.preventDefault();
-    if(cur===12 && pipeStep<5){ revealPipeStep(pipeStep); pipeStep++; }
+    if(cur===13 && pipeStep<5){ revealPipeStep(pipeStep); pipeStep++; }
     else showSlide(cur+1);
   }
   if(e.key==='ArrowLeft'){ e.preventDefault(); showSlide(cur-1); }
