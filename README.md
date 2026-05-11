@@ -43,8 +43,8 @@ Throughout the workshop we use the **ABIDE dataset** (Autism Brain Imaging Data 
 PCYMH-Workshop-2026/
 ├── workshop/
 │   ├── notebooks/
-│   │   ├── 01_ml_foundations.ipynb        # ~13 min hands-on
-│   │   ├── 02_explainability_shap.ipynb   # ~8 min hands-on
+│   │   ├── 01_ml_foundations.ipynb        # ~15-20 min hands-on
+│   │   ├── 02_explainability_shap.ipynb   # ~10-15 min hands-on
 │   │   └── 03_privacy_llm_ollama.ipynb    # ~10 min hands-on
 │   ├── presentation/
 │   │   └── index.html                     # Standalone slide deck (open in browser)
@@ -75,7 +75,7 @@ PCYMH-Workshop-2026/
 |------|------|-------------|
 | **Kevin Dick** | AI Data Scientist & Principal Investigator | BORN Ontario · CHEO-RI |
 | **Alibek Kruglikov** | Postdoctoral Fellow | Dick AI Lab, CHEO-RI |
-| **Youssef Megahed** | Graduate Researcher | Dick AI Lab, CHEO-RI |
+| **Youssef Megahed** | AI Analyst | Dick AI Lab, BORN Ontario |
 
 ---
 
@@ -84,4 +84,3 @@ PCYMH-Workshop-2026/
 Materials released under the [MIT License](LICENSE). Reuse and adaptation encouraged with attribution.
 
 **Dick AI Lab** · BORN Ontario · CHEO Research Institute
-`#AIforMentalHealth`
