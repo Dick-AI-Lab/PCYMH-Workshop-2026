@@ -1234,39 +1234,55 @@ each hospital's perimeter.</div>
 <!-- SLIDE 33: Ethical Framework -->
 <div class="slide" id="slide-33" data-section="5">
   <div class="section-label">Section 5 — Clinical Integration</div>
-  <h1 class="slide-title">A Framework for Responsible Clinical AI</h1>
-  <div class="grid-5" style="margin-top:1rem">
-    <div class="pillar">
-      <span class="p-icon">🔍</span>
-      <div class="p-title">Transparency</div>
-      <div class="p-desc">Can you explain how the model works? Would you be comfortable explaining its decision to a patient?</div>
+  <h1 class="slide-title" style="margin-bottom:.6rem">A Framework for Responsible Clinical AI</h1>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;width:100%;align-items:start">
+
+    <!-- Five Pillars (condensed) -->
+    <div>
+      <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem">Five-Pillar Framework</div>
+      <div style="display:flex;flex-direction:column;gap:.35rem">
+        <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.5rem .85rem">
+          <span style="font-size:1.4rem;flex-shrink:0">🔍</span>
+          <div><div style="font-weight:700;font-size:.92rem;color:var(--magenta)">Transparency</div><div style="font-size:.78rem;color:rgba(255,255,255,.7)">Explainable decisions a patient can understand</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.5rem .85rem">
+          <span style="font-size:1.4rem;flex-shrink:0">⚖️</span>
+          <div><div style="font-weight:700;font-size:.92rem;color:var(--magenta)">Fairness</div><div style="font-size:.78rem;color:rgba(255,255,255,.7)">Equal performance across demographic groups</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.5rem .85rem">
+          <span style="font-size:1.4rem;flex-shrink:0">🔐</span>
+          <div><div style="font-weight:700;font-size:.92rem;color:var(--magenta)">Privacy</div><div style="font-size:.78rem;color:rgba(255,255,255,.7)">PIPEDA/PHIPA compliant; documented data governance</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.5rem .85rem">
+          <span style="font-size:1.4rem;flex-shrink:0">✅</span>
+          <div><div style="font-weight:700;font-size:.92rem;color:var(--magenta)">Clinical Validity</div><div style="font-size:.78rem;color:rgba(255,255,255,.7)">Prospectively validated in your clinical population</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.5rem .85rem">
+          <span style="font-size:1.4rem;flex-shrink:0">👤</span>
+          <div><div style="font-weight:700;font-size:.92rem;color:var(--magenta)">Accountability</div><div style="font-size:.78rem;color:rgba(255,255,255,.7)">Human-in-the-loop for all clinical decisions</div></div>
+        </div>
+      </div>
     </div>
-    <div class="pillar">
-      <span class="p-icon">⚖️</span>
-      <div class="p-title">Fairness</div>
-      <div class="p-desc">Does the model perform equally across demographic groups? Who was excluded from training data?</div>
-    </div>
-    <div class="pillar">
-      <span class="p-icon">🔐</span>
-      <div class="p-title">Privacy</div>
-      <div class="p-desc">Is patient data protected? Are you compliant with PIPEDA/PHIPA? Is your data governance documented?</div>
-    </div>
-    <div class="pillar">
-      <span class="p-icon">✅</span>
-      <div class="p-title">Clinical Validity</div>
-      <div class="p-desc">Has the model been prospectively validated in your clinical population — not just the research dataset?</div>
-    </div>
-    <div class="pillar">
-      <span class="p-icon">👤</span>
-      <div class="p-title">Accountability</div>
-      <div class="p-desc">Who is responsible when the model is wrong? Is there always a human in the loop for clinical decisions?</div>
+
+    <!-- AI@CHEO Framework -->
+    <div>
+      <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem">AI@CHEO Framework</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(185,54,128,.4);border-radius:10px;padding:.8rem 1rem">
+        <div style="font-size:.76rem;color:rgba(255,255,255,.5);margin-bottom:.6rem;font-style:italic">CHEO's human-centred approach to responsible AI in pediatric care</div>
+        <div style="display:flex;flex-direction:column;gap:.32rem">
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">🎯 Intentional</span> <span style="color:rgba(255,255,255,.75)">— AI helps us focus more time on caring</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">🛡️ Trustworthy</span> <span style="color:rgba(255,255,255,.75)">— Safe, secure, private and reliable end-to-end</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">🔧 The Right Fit</span> <span style="color:rgba(255,255,255,.75)">— Solve the problem first; AI only when it fits</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">🌍 Inclusive &amp; Equitable</span> <span style="color:rgba(255,255,255,.75)">— Identify and address biases and barriers</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">🔄 Agile</span> <span style="color:rgba(255,255,255,.75)">— Continuously evaluate, learn, and improve</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">👥 Accountable</span> <span style="color:rgba(255,255,255,.75)">— Clear ownership; organization answers for AI impact</span></div>
+          <div style="font-size:.82rem"><span style="color:var(--magenta);font-weight:700">📚 Education</span> <span style="color:rgba(255,255,255,.75)">— Equip people to engage confidently with AI</span></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div style="margin-top:1.2rem;text-align:center;background:rgba(185,54,128,.15);border:2px solid var(--magenta);border-radius:10px;padding:.8rem 1.5rem;font-size:1.05rem;font-weight:600;color:var(--magenta)">
-    The Human-in-the-Loop requirement is non-negotiable for clinical decision support.
-  </div>
-  <div style="margin-top:.6rem;text-align:center;font-size:.8rem;color:rgba(255,255,255,.45)">Ref: Montreal Declaration for Responsible AI Development (2018)</div>
-  <div class="notes">"Print this slide. Put it in your grant applications and ethics submissions. Funding agencies are increasingly requiring this kind of framework explicitly. The five pillars map directly to what REBs and health technology assessment bodies are asking for." The human-in-the-loop point is non-negotiable — it's both an ethical requirement and a regulatory expectation.</div>
+  <div style="margin-top:.7rem;text-align:center;font-size:.72rem;color:rgba(255,255,255,.38)">Ref: Montreal Declaration for Responsible AI Development (2018) &nbsp;·&nbsp; AI@CHEO Responsible AI Framework (cheo.on.ca)</div>
+  <div class="notes">"Print this slide. Put it in your grant applications and ethics submissions. Funding agencies are increasingly requiring this kind of framework explicitly. The five pillars map directly to what REBs and health technology assessment bodies are asking for. The AI@CHEO framework shows how CHEO has institutionalized these values — this is what responsible deployment looks like in practice." The human-in-the-loop point is non-negotiable — it's both an ethical requirement and a regulatory expectation.</div>
 </div>
 
 <!-- SLIDE 34: Key Takeaways -->
