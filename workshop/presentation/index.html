@@ -168,6 +168,12 @@ body{font-family:'Source Sans 3',sans-serif;background:#000;overflow:hidden;heig
   border-top:2px solid var(--magenta);padding:.8rem 2rem;font-size:.9rem;
   color:rgba(255,255,255,.8);z-index:150;line-height:1.5;max-height:30vh;overflow-y:auto}
 body.notes-on .notes{display:block}
+/* ── Persistent footer ── */
+#slide-footer{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);
+  font-size:.68rem;color:rgba(255,255,255,.75);background:rgba(10,22,40,.5);
+  backdrop-filter:blur(4px);border-radius:4px;padding:.18rem .75rem;
+  z-index:99;font-family:'Source Sans 3',sans-serif;letter-spacing:.04em;
+  pointer-events:none;white-space:nowrap}
 /* ── Checklist ── */
 .checklist li{list-style:none;padding:.3rem 0;font-size:1.05rem;display:flex;gap:.7rem;align-items:baseline}
 .checklist li::before{content:"☐";color:var(--magenta);font-size:1.1rem;flex-shrink:0}
@@ -1547,5 +1553,6 @@ document.addEventListener('keydown', e=>{
 // Init
 showSlide(0);
 </script>
+<div id="slide-footer">github.com/Dick-AI-Lab/PCYMH-Workshop-2026</div>
 </body>
 </html>
